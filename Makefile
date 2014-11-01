@@ -1,15 +1,17 @@
 CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=main.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
+SOURCES=main.cc
+OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=main
 
 all: $(SOURCES) $(EXECUTABLE)
-	
-$(EXECUTABLE): $(OBJECTS) 
+
+$(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
-.cpp.o:
+.cc.o:
 	$(CC) $(CFLAGS) $< -o $@
 
+clean:
+	-rm $(OBJECTS) $(EXECUTABLE)
