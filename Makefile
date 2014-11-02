@@ -1,4 +1,3 @@
-CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=
 SOURCES=main.cc
@@ -8,10 +7,10 @@ EXECUTABLE=main
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
 
 .cc.o:
-	$(CC) $(CFLAGS) $< -o $@
+	$(CXX) $(CFLAGS) $< -o $@
 
 test: $(EXECUTABLE)
 	./$(EXECUTABLE) 10 test_cases/simple1_a.txt test_cases/simple1_b.txt
