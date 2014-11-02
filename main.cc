@@ -61,6 +61,14 @@ void type_array(std::string str, bool *types) {
   }
 }
 
+bool is_lms(bool *types, unsigned int i) {
+  if(i > 0 && types[i] && !types[i - 1]) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 int main(int argc, char *argv[]) {
 
   if(argc != 4) {
@@ -90,7 +98,8 @@ int main(int argc, char *argv[]) {
   type_array(ref_string, types);
 
   for (int i = 0; i < sa.size(); ++i) {
-    std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t") << ref_string.substr(sa[i]) << std::endl;
+    std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t")
+    << ref_string.substr(sa[i]) << std::endl;
   }
 
   std::cout << std::endl << ref_string << std::endl;
@@ -98,6 +107,11 @@ int main(int argc, char *argv[]) {
     std::cout << (types[i] ? "S" : "L");
   }
   std::cout << std::endl;
+    for (int i = 0; i < ref_string.size(); ++i) {
+    std::cout << (is_lms(types, i) ? "*" : " ");
+  }
+  std::cout << std::endl;
+
 
   return 0;
 }
