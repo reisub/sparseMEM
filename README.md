@@ -1,5 +1,5 @@
-sparseMEM
-=========
+sparseMEM - WORK IN PROGRESS
+============================
 
 [![Build Status](https://travis-ci.org/reisub/sparseMEM.svg?branch=master)](https://travis-ci.org/reisub/sparseMEM)
 
@@ -31,7 +31,7 @@ a `bucket` is a sub-array of the `SA` for all the suffixes starting with the sam
 
 `LMS` - left-most S-type
 
-A character `S[i]` i called LMS if `S[i]` i S-type and `S[i+i]` is L-type. A suffix `suf(S, i)` is called LMS is `S[i]` is a LMS character.
+A character `S[i]` i called LMS if `S[i]` i S-type and `S[i-1]` is L-type. A suffix `suf(S, i)` is called LMS is `S[i]` is a LMS character.
 
 A LMS-substring is a substring `S[i..j]` with both `S[i]` and `S[j]` being LMS characters and there is no other LMS character in the substring. The termination character `$` is also a LMS-substring.
 

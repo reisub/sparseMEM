@@ -93,5 +93,11 @@ int main(int argc, char *argv[]) {
     std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t") << ref_string.substr(sa[i]) << std::endl;
   }
 
+  std::cout << std::endl << ref_string << std::endl;
+  for (int i = 0; i < ref_string.size(); ++i) {
+    std::cout << (types[i] ? "S" : "L");
+  }
+  std::cout << std::endl;
+
   return 0;
 }
