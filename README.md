@@ -33,7 +33,7 @@ a `bucket` is a sub-array of the `SA` for all the suffixes starting with the sam
 
 A character `S[i]` i called LMS if `S[i]` i S-type and `S[i+i]` is L-type. A suffix `suf(S, i)` is called LMS is `S[i]` is a LMS character.
 
-A LMS-substring is a substring S[i..j] with both S[i] and S[j] being LMS characters and there is no other LMS character in the substring. The termination character `$` is also a LMS-substring.
+A LMS-substring is a substring `S[i..j]` with both `S[i]` and `S[j]` being LMS characters and there is no other LMS character in the substring. The termination character `$` is also a LMS-substring.
 
 ### Graphical example
 
