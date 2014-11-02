@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
   type_array(ref_string, types);
 
   for (int i = 0; i < sa.size(); ++i) {
-    std::cout << "[" << i << "] " << sa[i] << (types[sa[i]] ? " S" : " L") << std::endl;
+    std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t") << ref_string.substr(sa[i]) << std::endl;
   }
 
   return 0;
