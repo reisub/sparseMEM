@@ -40,27 +40,24 @@ void suffix_array(std::string str, std::vector<int> &sa) {
 
 int main(int argc, char *argv[]) {
 
-  if(argc != 4) {
-    std::cerr << "Usage: " << argv[0] << "<match minimum length> <file containing reference string> <file containing string for matching>" << std::endl;
+  if(argc != 2) {
+    std::cerr << "Usage: " << argv[0] << " <file containing reference string>" << std::endl;
     exit(-1);
   }
 
-  unsigned int minimum_size = atoi(argv[1]);
+  std::ifstream ref_file(argv[1]);
 
-  std::ifstream ref_file(argv[2]);
-  std::ifstream match_file(argv[3]);
+  if(!ref_file.is_open()) {
+    std::cerr << "There was a problem openning the file \"" << argv[1] << "\"!\nAborting." << std::endl;
+    exit(-2);
+  }
 
   std::string ref_string;
-  std::string match_string;
-
   std::getline(ref_file, ref_string);
-  std::getline(match_file, match_string);
 
-  std::cout << "Reference string: " << ref_string << std::endl;
-  std::cout << "Match string:     " << match_string << std::endl;
+  std::cout << "String: " << ref_string << std::endl;
 
   std::vector<int> sa;
-  std::vector<std::string::iterator> lms_substr_pointers; // Definition 3.4: (Sample Pointer Array) P1
   sa.reserve(ref_string.size());
   bool *types = new bool[ref_string.size()];
 
@@ -72,20 +69,7 @@ int main(int argc, char *argv[]) {
     << ref_string.substr(sa[i]) << std::endl;
   }
 
-  std::cout << std::endl << ref_string << std::endl;
-  for (int i = 0; i < ref_string.size(); ++i) {
-    std::cout << (types[i] ? "S" : "L");
-  }
-  std::cout << std::endl;
-    for (int i = 0; i < ref_string.size(); ++i) {
-    std::cout << (is_lms(types, i) ? "*" : " ");
-    if(is_lms(types, i)) {
-      lms_substr_pointers.push_back(ref_string.begin() + i);
-    }
-  }
-  std::cout << std::endl;
-
-  sa_is(ref_string, new unsigned int[ref_string.size()]);
+  sa_is(ref_string, new unsigned int[ref_string.size()], ref_string.size(), 128, 0);
 
   return 0;
 }

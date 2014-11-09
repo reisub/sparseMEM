@@ -43,8 +43,6 @@ If we have all the LMS-substrings sorted in the buckets in their lexicographical
 
 `SA1` - suffix array for `S1`
 
-
-
 ### Graphical example
 
 S - `cccagaaaactaccacctccggccagta$`

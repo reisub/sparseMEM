@@ -33,17 +33,28 @@ bool is_lms(bool *types, unsigned int i) {
   }
 }
 
-int sa_is(std::string &s, unsigned int *SA) {
-  // TODO checks
-  int n = s.size();
-  if(n == 0) {
-    return 0;
-  } else if (n == 1) {
-    SA[0] = 0;
-    return 0;
-  } else {
-    // TODO calculate
-    std::cout << "TODO" << std::endl;
-    return 0;
+int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int k, unsigned int start_index) {
+  bool *types = new bool[n];
+  type_array(s, types);
+
+  std::vector<int> lms_substrs(n); // Definition 3.4: (Sample Pointer Array) P1
+  std::vector<int> s1(n); // zero-initialized
+  std::vector<int> buckets(k); // zero-initialized
+
+  std::cout << std::endl << s << std::endl;
+  for (int i = 0; i < s.size(); ++i) {
+    std::cout << (types[i] ? "S" : "L");
   }
+  std::cout << std::endl;
+  for (int i = 0; i < n; ++i) {
+    std::cout << (is_lms(types, i) ? "*" : " ");
+    if(i < (n - 1) && is_lms(types, i)) {
+      lms_substrs.push_back(i);
+    }
+  }
+  std::cout << std::endl;
+
+  // TODO calculate
+  std::cout << "TODO" << std::endl;
+  return 0;
 }

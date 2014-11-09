@@ -17,6 +17,6 @@ void type_array(std::string str, bool *types);
 
 bool is_lms(bool *types, unsigned int i);
 
-int sa_is(std::string &s, unsigned int *SA);
+int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int k, unsigned int start_index);
 
 #endif /* SA_IS_H */

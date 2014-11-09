@@ -1,4 +1,4 @@
-CFLAGS=-c -Wall
+CFLAGS=-c -Wall -Wextra -Wpedantic
 LDFLAGS=
 SOURCES=main.cc sa_is.cc
 OBJECTS=$(SOURCES:.cc=.o)
@@ -13,7 +13,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CFLAGS) $< -o $@
 
 test: $(EXECUTABLE)
-	./$(EXECUTABLE) 10 test_cases/simple1_a.txt test_cases/simple1_b.txt
+	./$(EXECUTABLE) test_cases/simple.txt
 
 clean:
 	-rm $(OBJECTS) $(EXECUTABLE)
