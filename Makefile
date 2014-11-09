@@ -1,4 +1,4 @@
-CFLAGS=-c -Wall -Wextra -Wpedantic
+CFLAGS=-c -Wall -Wextra
 LDFLAGS=
 SOURCES=main.cc sa_is.cc
 OBJECTS=$(SOURCES:.cc=.o)
