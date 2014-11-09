@@ -35,6 +35,14 @@ A character `S[i]` is called LMS if `S[i]` i S-type and `S[i-1]` is L-type. A su
 
 A LMS-substring is a substring `S[i..j]` with both `S[i]` and `S[j]` being LMS characters and there is no other LMS character in the substring. The termination character `$` is also a LMS-substring.
 
+`P1` is an array containing the pointers for all the LMS-substrings in S with their original positional order being preserved.
+
+If we have all the LMS-substrings sorted in the buckets in their lexicographical order where all the LMS- substrings in a bucket are identical, then we name each item of P1 by the index of its bucket to produce a new string `S1`.
+
+`SA1` - suffix array for `S1`
+
+
+
 ### Graphical example
 
 S - `cccagaaaactaccacctccggccagta$`

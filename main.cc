@@ -5,6 +5,8 @@
 #include <vector>
 #include <algorithm>
 
+#include "sa_is.cc"
+
 #define TERMINATION_CHAR '$'
 
 struct suffix {
@@ -36,39 +38,6 @@ void suffix_array(std::string str, std::vector<int> &sa) {
   }
 }
 
-/*
-  * Creates a type array, true means S-Type, false means L-Type.
-*/
-void type_array(std::string str, bool *types) {
-
-  unsigned int last_index = str.size() - 1;
-
-  // the last type depends if we have an explicit termination character in the string
-  if (str[last_index] == TERMINATION_CHAR) {
-    types[last_index] = true;
-  } else {
-    types[last_index] = false;
-  }
-
-  for (int i = last_index - 1; i >= 0; --i) {
-    if (str[i] < str[i + 1]) {
-      types[i] = true;
-    } else if (str[i] > str[i + 1]) {
-      types[i] = false;
-    } else {
-      types[i] = types[i + 1];
-    }
-  }
-}
-
-bool is_lms(bool *types, unsigned int i) {
-  if(i > 0 && types[i] && !types[i - 1]) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 int main(int argc, char *argv[]) {
 
   if(argc != 4) {
@@ -91,6 +60,7 @@ int main(int argc, char *argv[]) {
   std::cout << "Match string:     " << match_string << std::endl;
 
   std::vector<int> sa;
+  std::vector<std::string::iterator> lms_substr_pointers; // Definition 3.4: (Sample Pointer Array) P1
   sa.reserve(ref_string.size());
   bool *types = new bool[ref_string.size()];
 
@@ -109,9 +79,13 @@ int main(int argc, char *argv[]) {
   std::cout << std::endl;
     for (int i = 0; i < ref_string.size(); ++i) {
     std::cout << (is_lms(types, i) ? "*" : " ");
+    if(is_lms(types, i)) {
+      lms_substr_pointers.push_back(ref_string.begin() + i);
+    }
   }
   std::cout << std::endl;
 
+  sa_is(ref_string, new int[ref_string.size()]);
 
   return 0;
 }
