@@ -9,6 +9,8 @@ An implementation of an algorithm for finding maximal exact matches in large seq
 
 `S` - a string of `n` characters stored in an array
 
+`k` - number of characters in alphabet
+
 `$` - the termination character of the string, the unique lexicographically smallest character in the alphabet which contains the possible characters in `S`
 
 `suf(S, i)` - a suffix of the string `S` starting with the character `S[i]` all the way to the termination character `$`

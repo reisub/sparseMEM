@@ -1,10 +1,4 @@
-#include <cstdlib>
-
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-#define TERMINATION_CHAR '$'
+#include "sa_is.h"
 
 /*
   * Creates a type array, true means S-Type, false means L-Type.
@@ -39,7 +33,7 @@ bool is_lms(bool *types, unsigned int i) {
   }
 }
 
-int sa_is(std::string &s, int *SA) {
+int sa_is(std::string &s, unsigned int *SA) {
   // TODO checks
   int n = s.size();
   if(n == 0) {

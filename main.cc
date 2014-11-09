@@ -5,7 +5,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "sa_is.cc"
+#include "sa_is.h"
 
 #define TERMINATION_CHAR '$'
 
@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
   }
   std::cout << std::endl;
 
-  sa_is(ref_string, new int[ref_string.size()]);
+  sa_is(ref_string, new unsigned int[ref_string.size()]);
 
   return 0;
 }

@@ -1,6 +1,6 @@
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=main.cc
+SOURCES=main.cc sa_is.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=main
 
