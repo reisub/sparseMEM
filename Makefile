@@ -17,3 +17,5 @@ test: $(EXECUTABLE)
 
 clean:
 	-rm $(OBJECTS) $(EXECUTABLE)
+
+.PHONY: clean
