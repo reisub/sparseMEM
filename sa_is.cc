@@ -37,10 +37,10 @@ bool is_lms(bool *types, unsigned int i) {
 void get_buckets(std::string &s, unsigned int *buckets, unsigned int alphabet_size, bool end) {
   unsigned int sum = 0;
   // compute bucket sizes
-  for (int i = 0; i < s.size(); ++i) {
-    buckets[s[i]]++;
+  for (unsigned int i = 0; i < s.size(); ++i) {
+    buckets[static_cast<unsigned char>(s[i])]++;
   }
-  for (int i = 0; i < alphabet_size; ++i) {
+  for (unsigned int i = 0; i < alphabet_size; ++i) {
     sum += buckets[i];
     if (end) {
       buckets[i] = sum;
@@ -52,7 +52,7 @@ void get_buckets(std::string &s, unsigned int *buckets, unsigned int alphabet_si
 
 int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabet_size, unsigned int character_size) {
 
-  if (SA == NULL || n < 0 || alphabet_size <= 0) {
+  if (SA == NULL) {
     return -1;
   }
 
@@ -69,14 +69,14 @@ int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabe
   type_array(s, types);
   get_buckets(s, buckets, alphabet_size, true);
 
-  for (int i = 0; i < n; ++i) {
+  for (unsigned int i = 0; i < n; ++i) {
     SA[i] = 0;
   }
 
-  for (int i = 1; i < n; ++i) {
+  for (unsigned int i = 1; i < n; ++i) {
     if (is_lms(types, i)) {
-      buckets[s[i]]--;
-      SA[buckets[s[i]]] = i;
+      buckets[static_cast<unsigned char>(s[i])]--;
+      SA[buckets[static_cast<unsigned char>(s[i])]] = i;
     }
   }
 
@@ -89,11 +89,11 @@ int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabe
   std::vector<int> s1(n); // zero-initialized
 
   std::cout << std::endl << s << std::endl;
-  for (int i = 0; i < s.size(); ++i) {
+  for (unsigned int i = 0; i < s.size(); ++i) {
     std::cout << (types[i] ? "S" : "L");
   }
   std::cout << std::endl;
-  for (int i = 0; i < n; ++i) {
+  for (unsigned int i = 0; i < n; ++i) {
     std::cout << (is_lms(types, i) ? "*" : " ");
     if(i < (n - 1) && is_lms(types, i)) {
       lms_substrs.push_back(i);
