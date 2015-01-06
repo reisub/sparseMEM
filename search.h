@@ -1,6 +1,8 @@
 using namespace std;
 
 #define COUNTOF(x) (sizeof(x)/sizeof(x[0]))
+#define MAX2(x,y) ((x) > (y) ? return (x) : return (y)
+#define MAX3(x,y,z) ( x > z ? return MAX2((x), (y)) : return MAX2((z),(y))
 #define N = 11
 #define K = 10
 
