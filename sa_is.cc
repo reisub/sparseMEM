@@ -33,9 +33,26 @@ bool is_lms(bool *types, unsigned int i) {
   }
 }
 
-int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int k, unsigned int start_index) {
+// finds the head (end == false) or tail (end == true) index of each character
+void get_buckets(std::string &s, unsigned int *buckets, unsigned int alphabet_size, bool end) {
+  unsigned int sum = 0;
+  // compute bucket sizes
+  for (int i = 0; i < s.size(); ++i) {
+    buckets[s[i]]++;
+  }
+  for (int i = 0; i < alphabet_size; ++i) {
+    sum += buckets[i];
+    if (end) {
+      buckets[i] = sum;
+    } else {
+      buckets[i] = sum - buckets[i];
+    }
+  }
+}
 
-  if (SA == NULL || n < 0 || k <= 0) {
+int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabet_size, unsigned int character_size) {
+
+  if (SA == NULL || n < 0 || alphabet_size <= 0) {
     return -1;
   }
 
@@ -47,11 +64,29 @@ int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int k, unsi
   }
 
   bool *types = new bool[n];
+  unsigned int *buckets = new unsigned int[alphabet_size](); // used for storing starts and ends of buckets
+
   type_array(s, types);
+  get_buckets(s, buckets, alphabet_size, true);
+
+  for (int i = 0; i < n; ++i) {
+    SA[i] = 0;
+  }
+
+  for (int i = 1; i < n; ++i) {
+    if (is_lms(types, i)) {
+      buckets[s[i]]--;
+      SA[buckets[s[i]]] = i;
+    }
+  }
+
+  // TODO induce SA L-type
+  // TODO induce SA S-type
+
+  // TEST CODE START
 
   std::vector<int> lms_substrs(n); // Definition 3.4: (Sample Pointer Array) P1
   std::vector<int> s1(n); // zero-initialized
-  std::vector<int> buckets(k); // zero-initialized
 
   std::cout << std::endl << s << std::endl;
   for (int i = 0; i < s.size(); ++i) {
@@ -66,7 +101,11 @@ int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int k, unsi
   }
   std::cout << std::endl;
 
-  // TODO calculate
-  std::cout << "TODO" << std::endl;
+  // TEST CODE END
+
+  // deallocate all memory to prevent leaks
+  delete[] types;
+  delete[] buckets;
+
   return 0;
 }
