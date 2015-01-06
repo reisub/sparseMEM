@@ -121,9 +121,88 @@ interval_t search_string(string query_string) {
 	return triplet.interval;
 }
 
+/*
+triplet_t traverse(p, d:[s..e], M) {
+	while (p + d < P.length()){
+		d2 : [s2..e2] = topdown(P[p+d], d:[s..e])
+		if (d2 == empty_interval)
+			return d:[s..e]	
+
+		d : [s..e] = d2 : [s2..e2]
+		if (d >= M) 
+			break;		
+	}
+	
+	return d:[s..e];
+}
+
+void findL (p, i, q){
+	for (k = 0; k < K; k += 1){
+		if (p == 0 or i == 0){
+			MEM at i in S, p in P, length q;
+			return ;	
+		}
+		
+		if (P[p-1] != S[i-1] and q >= L){
+			MEM at i in S, p in P, length q;
+			return ;
+		}
+
+		p -= 1; 
+		i -= 1;
+		q += 1;
+	}
+}
 
 
+void collect_MEMs (p, d:[s..e], q:[l..r]){
+	for (i = l; i < r; i += 1)
+		findL (p, SA[i], q);
 
+	while q >= d 
+		if r + 1 < n/K
+			q = max (LCP[l], LCP[r + 1]);
+		else q = LCP[l];
+
+		if q >= d
+			while LCP[l] >= q
+				l = l-1
+				findL (p, SA[l], q)
+			while r+1 < n/K and LCP[r + 1] >= q
+				r += 1
+				findL (p, SA[r], q);
+
+	return ;
+}
+
+
+void find_MEMs(p0) {
+	d:[s..e] = q:[l..r] = 0:[0..n / (K-1)]
+	p = p0
+	while p < (P.length() - (K- p0))
+		d:[s..e] = traverse(p, d:[s..e], L - (K - 1))
+		q:[l..r] = traverse(p, q:[l..r], P.length())
+
+		if d <= 1
+			d:[s..e] = q:[l..r] = 0:[0..n / (K-1)]
+			p = p + K
+			continue
+
+		if d >= (L - (K - 1))
+			collect_MEMS(p, d:[s..e], q:[l..r])
+
+		p += K
+
+		d:[s..e] = suffix_link (d:[s..e])
+		q:[l..r] = suffix_link (q:[l..r])
+
+		if d == empty
+			d:[s..e] = q:[l..r] = 0:[0..n / (K-1)]
+			continue
+}
+
+
+*/
 
 
 
