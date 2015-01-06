@@ -1,6 +1,6 @@
 CFLAGS=-c -Wall -Wextra
 LDFLAGS=
-SOURCES=main.cc sa_is.cc
+SOURCES=main.cc sa_is.cc fasta_parser.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=main
 

@@ -34,6 +34,18 @@ bool is_lms(bool *types, unsigned int i) {
 }
 
 int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int k, unsigned int start_index) {
+
+  if (SA == NULL || n < 0 || k <= 0) {
+    return -1;
+  }
+
+  if(n <= 1) {
+    if (n == 1) {
+      SA[0] = 0;
+    }
+    return 0;
+  }
+
   bool *types = new bool[n];
   type_array(s, types);
 
