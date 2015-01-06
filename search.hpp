@@ -1,9 +1,14 @@
+#include <cmath>
+
 using namespace std;
 
 #define COUNTOF(x) (sizeof(x)/sizeof(*x))
+#define N = 11;
+#define K = 
 
 extern string S;
 extern long SA[];
+extern long ISA[];
 
 /*
 *
@@ -204,9 +209,50 @@ void find_MEMs(p0) {
 
 */
 
+triplet_t suffix_link (long offset, long start_interval, long end_interval) {
+	triplet_t empty_triplet = {-1, {0, 0}};
+	triplte_t triplet;
+	
+	offset -= K;
+	if (offset <= 0) 
+		return empty_triplet;
 
+	start_interval = ISA[SA[l] / (K + 1)];
+	end_interval = ISA[SA[r] / (K + 1)];
 
+	triplet = expand_link(offset, start_interval, end_interval);
+	
+	return triplet; 
+}
 
+triplet_t expand_link (long offset, long start_interval, long end_interval) {
+	triplet_t starting_interval = {0, {0, N-1}};
+	triplet_t empty_interval = {-1, {0, 0}};
+	triplet_t interval;
+	
+	if (offset == 0) 
+		return starting_interval;
+
+	T = 2 * offset * log(N);
+	e = 0;
+
+	while (start_interval >= 0 and LCP[start_interval] >= q) {
+		start_interval -= 1;		
+		e += 1;
+		if (e >= T)
+			return 	empty_interval;
+	}
+
+	while (end_interval <= (N - 1) and LCP[end_interval + 1] >= q) {
+		end_interval += 1;		
+		e += 1;
+		if (e >= T)
+			return 	empty_interval;	
+	}
+	
+	interval = {offset, {start_interval, end_interval}};
+	return interval;
+}
 
 
 
