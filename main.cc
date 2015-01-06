@@ -24,7 +24,7 @@ bool compare(suffix i, suffix j) {
 void suffix_array(std::string str, std::vector<int> &sa) {
   std::vector<suffix> suffixes;
 
-  for (int i = 0; i < str.size(); ++i) {
+  for (unsigned int i = 0; i < str.size(); ++i) {
     suffix *s = new suffix;
     s->index = i;
     s->suffix_string = str.substr(i);
@@ -33,7 +33,7 @@ void suffix_array(std::string str, std::vector<int> &sa) {
   }
 
   std::sort(suffixes.begin(), suffixes.end(), compare);
-  for (int i = 0; i < suffixes.size(); ++i) {
+  for (unsigned int i = 0; i < suffixes.size(); ++i) {
     sa.push_back(suffixes[i].index);
   }
 }
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
   suffix_array(ref_string, sa);
   type_array(ref_string, types);
 
-  for (int i = 0; i < sa.size(); ++i) {
+  for (unsigned int i = 0; i < sa.size(); ++i) {
     std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t")
     << ref_string.substr(sa[i]) << std::endl;
   }
