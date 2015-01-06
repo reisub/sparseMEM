@@ -1,6 +1,6 @@
 using namespace std;
 
-#define COUNTOF(x) (sizeof(x)/sizeof(*x))
+#define COUNTOF(x) (sizeof(x)/sizeof(x[0]))
 #define N = 11
 #define K = 10
 
@@ -17,11 +17,10 @@ struct triplet_t {
 long binary_search_left (string &S, long *SA, char comparing_character, long query_offset, long start_interval, long end_interval);
 
 long binary_search_right (string &S, long *SA, char comparing_character, long query_offset, long start_interval, long end_interval);
-/*
-triplet_t topdown_search (string *S, long *SA, char comparing_character, long query_offset, long start_interval, long end_interval);
 
-interval_t search_string(string *S, long *SA, string query_string); 
-*/
+triplet_t topdown_search (string &S, long *SA, char comparing_character, long query_offset, long start_interval, long end_interval);
+
+interval_t search_string(string &S, long *SA, string query_string); 
 /*
 triplet_t traverse(p, d:[s..e], M);
 
@@ -30,11 +29,11 @@ void findL (p, i, q);
 void collect_MEMs (p, d:[s..e], q:[l..r]);
 
 void find_MEMs(p0); 
-
+*/
 triplet_t suffix_link (long offset, long start_interval, long end_interval);
 
 triplet_t expand_link (long offset, long start_interval, long end_interval);
-*/
+
 
 
 
