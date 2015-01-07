@@ -50,6 +50,32 @@ void get_buckets(std::string &s, unsigned int *buckets, unsigned int alphabet_si
   }
 }
 
+void induce_sa_l(std::string &s, unsigned int *SA, unsigned int n, bool *types, unsigned int *buckets, unsigned int alphabet_size) {
+  // find starts of buckets
+  get_buckets(s, buckets, alphabet_size, false);
+  int tmp;
+  for (unsigned int i = 0; i < n; ++i) {
+    tmp = SA[i] - 1;
+    if (tmp >= 0 && types[tmp] == L_TYPE) {
+      SA[buckets[static_cast<unsigned int>(s[tmp])]] = tmp;
+      buckets[static_cast<unsigned int>(s[tmp])]++;
+    }
+  }
+}
+
+void induce_sa_s(std::string &s, unsigned int *SA, unsigned int n, bool *types, unsigned int *buckets, unsigned int alphabet_size) {
+  // find ends of buckets
+  get_buckets(s, buckets, alphabet_size, true);
+  int tmp;
+  for (int i = n - 1; i >= 0; --i) {
+    tmp = SA[i] - 1;
+    if (tmp >= 0 && types[tmp] == S_TYPE) {
+      SA[buckets[static_cast<unsigned int>(s[tmp])]] = tmp;
+      buckets[static_cast<unsigned int>(s[tmp])]--;
+    }
+  }
+}
+
 int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabet_size, unsigned int character_size) {
 
   if (SA == NULL) {
@@ -80,8 +106,10 @@ int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabe
     }
   }
 
-  // TODO induce SA L-type
-  // TODO induce SA S-type
+  induce_sa_l(s, SA, n, types, buckets, alphabet_size);
+  induce_sa_s(s, SA, n, types, buckets, alphabet_size);
+
+  // delete[] buckets;
 
   // TEST CODE START
 

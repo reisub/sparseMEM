@@ -9,6 +9,8 @@
 #include <string>
 
 #define TERMINATION_CHAR '$'
+#define S_TYPE true
+#define L_TYPE false
 
 /*
   * Creates a type array, true means S-Type, false means L-Type.
