@@ -63,8 +63,8 @@ void induce_sa_s(const char *s, int *SA, int n, bool *types, int *buckets, int a
   for (int i = n - 1; i >= 0; --i) {
     tmp = SA[i] - 1;
     if (tmp >= 0 && types[tmp] == S_TYPE) {
-      SA[buckets[static_cast<unsigned char>(s[tmp])]] = tmp;
       buckets[static_cast<unsigned char>(s[tmp])]--;
+      SA[buckets[static_cast<unsigned char>(s[tmp])]] = tmp;
     }
   }
 }
