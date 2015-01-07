@@ -62,14 +62,14 @@ int main(int argc, char *argv[]) {
   bool *types = new bool[ref_string.size()];
 
   suffix_array(ref_string, sa);
-  type_array(ref_string, types);
+  type_array(ref_string.c_str(), types, ref_string.size());
 
   for (unsigned int i = 0; i < sa.size(); ++i) {
     std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t")
     << ref_string.substr(sa[i]) << std::endl;
   }
 
-  sa_is(ref_string, new unsigned int[ref_string.size()], ref_string.size(), 128, 0);
+  sa_is(ref_string.c_str(), new unsigned int[ref_string.size()], ref_string.size(), 128);
 
   return 0;
 }

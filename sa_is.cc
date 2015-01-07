@@ -3,22 +3,15 @@
 /*
   * Creates a type array, true means S-Type, false means L-Type.
 */
-void type_array(std::string str, bool *types) {
+void type_array(const char *s, bool *types, unsigned int n) {
+  types[n - 1] = S_TYPE;
+  types[n - 2] = L_TYPE;
 
-  unsigned int last_index = str.size() - 1;
-
-  // the last type depends if we have an explicit termination character in the string
-  if (str[last_index] == TERMINATION_CHAR) {
-    types[last_index] = true;
-  } else {
-    types[last_index] = false;
-  }
-
-  for (int i = last_index - 1; i >= 0; --i) {
-    if (str[i] < str[i + 1]) {
-      types[i] = true;
-    } else if (str[i] > str[i + 1]) {
-      types[i] = false;
+  for (int i = n - 3; i >= 0; --i) {
+    if (s[i] < s[i + 1]) {
+      types[i] = S_TYPE;
+    } else if (s[i] > s[i + 1]) {
+      types[i] = L_TYPE;
     } else {
       types[i] = types[i + 1];
     }
@@ -34,10 +27,10 @@ bool is_lms(bool *types, unsigned int i) {
 }
 
 // finds the head (end == false) or tail (end == true) index of each character
-void get_buckets(std::string &s, unsigned int *buckets, unsigned int alphabet_size, bool end) {
+void get_buckets(const char *s, unsigned int n, unsigned int *buckets, unsigned int alphabet_size, bool end) {
   unsigned int sum = 0;
   // compute bucket sizes
-  for (unsigned int i = 0; i < s.size(); ++i) {
+  for (unsigned int i = 0; i < n; ++i) {
     buckets[static_cast<unsigned char>(s[i])]++;
   }
   for (unsigned int i = 0; i < alphabet_size; ++i) {
@@ -50,9 +43,9 @@ void get_buckets(std::string &s, unsigned int *buckets, unsigned int alphabet_si
   }
 }
 
-void induce_sa_l(std::string &s, unsigned int *SA, unsigned int n, bool *types, unsigned int *buckets, unsigned int alphabet_size) {
+void induce_sa_l(const char *s, unsigned int *SA, unsigned int n, bool *types, unsigned int *buckets, unsigned int alphabet_size) {
   // find starts of buckets
-  get_buckets(s, buckets, alphabet_size, false);
+  get_buckets(s, n, buckets, alphabet_size, false);
   int tmp;
   for (unsigned int i = 0; i < n; ++i) {
     tmp = SA[i] - 1;
@@ -63,9 +56,9 @@ void induce_sa_l(std::string &s, unsigned int *SA, unsigned int n, bool *types, 
   }
 }
 
-void induce_sa_s(std::string &s, unsigned int *SA, unsigned int n, bool *types, unsigned int *buckets, unsigned int alphabet_size) {
+void induce_sa_s(const char *s, unsigned int *SA, unsigned int n, bool *types, unsigned int *buckets, unsigned int alphabet_size) {
   // find ends of buckets
-  get_buckets(s, buckets, alphabet_size, true);
+  get_buckets(s, n, buckets, alphabet_size, true);
   int tmp;
   for (int i = n - 1; i >= 0; --i) {
     tmp = SA[i] - 1;
@@ -76,7 +69,7 @@ void induce_sa_s(std::string &s, unsigned int *SA, unsigned int n, bool *types, 
   }
 }
 
-int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabet_size, unsigned int character_size) {
+int sa_is(const char *s, unsigned int *SA, unsigned int n, unsigned int alphabet_size) {
 
   if (SA == NULL) {
     return -1;
@@ -92,8 +85,8 @@ int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabe
   bool *types = new bool[n];
   unsigned int *buckets = new unsigned int[alphabet_size](); // used for storing starts and ends of buckets
 
-  type_array(s, types);
-  get_buckets(s, buckets, alphabet_size, true);
+  type_array(s, types, n);
+  get_buckets(s, n, buckets, alphabet_size, true);
 
   for (unsigned int i = 0; i < n; ++i) {
     SA[i] = 0;
@@ -117,7 +110,7 @@ int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabe
   std::vector<int> s1(n); // zero-initialized
 
   std::cout << std::endl << s << std::endl;
-  for (unsigned int i = 0; i < s.size(); ++i) {
+  for (unsigned int i = 0; i < n; ++i) {
     std::cout << (types[i] ? "S" : "L");
   }
   std::cout << std::endl;

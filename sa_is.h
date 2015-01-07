@@ -15,10 +15,10 @@
 /*
   * Creates a type array, true means S-Type, false means L-Type.
 */
-void type_array(std::string str, bool *types);
+void type_array(const char *s, bool *types, unsigned int n);
 
 bool is_lms(bool *types, unsigned int i);
 
-int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabet_size, unsigned int character_size);
+int sa_is(const char *s, unsigned int *SA, unsigned int n, unsigned int alphabet_size);
 
 #endif /* SA_IS_H */
