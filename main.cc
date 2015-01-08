@@ -7,8 +7,6 @@
 
 #include "sa_is.h"
 
-#define TERMINATION_CHAR '$'
-
 struct suffix {
   unsigned int index;
   std::string suffix_string;
@@ -18,9 +16,7 @@ bool compare(suffix i, suffix j) {
   return i.suffix_string < j.suffix_string ;
 }
 
-/*
-  * Creates a sufix array for the given string using a simple and slow method
-*/
+// Creates a sufix array for the given string using a simple and slow method
 void suffix_array(std::string str, std::vector<int> &sa) {
   std::vector<suffix> suffixes;
 
@@ -62,14 +58,24 @@ int main(int argc, char *argv[]) {
   bool *types = new bool[ref_string.size()];
 
   suffix_array(ref_string, sa);
-  type_array(ref_string, types);
+  type_array(ref_string.c_str(), types, ref_string.size(), sizeof(char));
 
   for (unsigned int i = 0; i < sa.size(); ++i) {
     std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t")
     << ref_string.substr(sa[i]) << std::endl;
   }
 
-  sa_is(ref_string, new unsigned int[ref_string.size()], ref_string.size(), 128, 0);
+  int *SA = new int[ref_string.size()];
+
+  sa_is(ref_string.c_str(), SA, ref_string.size(), 256, sizeof(char));
+
+  for (int i = 0; i < ref_string.size(); ++i) {
+    printf("%d ", SA[i]);
+    if (SA[i] != sa[i]) {
+      std::cout << "<-!!! ";
+    }
+  }
+  printf("\n");
 
   return 0;
 }

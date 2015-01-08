@@ -1,32 +1,31 @@
 #include "sa_is.h"
 
-/*
-  * Creates a type array, true means S-Type, false means L-Type.
-*/
-void type_array(std::string str, bool *types) {
-
-  unsigned int last_index = str.size() - 1;
-
-  // the last type depends if we have an explicit termination character in the string
-  if (str[last_index] == TERMINATION_CHAR) {
-    types[last_index] = true;
+inline int chr(const char *s, int i, int cs) {
+  if (cs == sizeof(int)) {
+    return ((int *) s)[i];
   } else {
-    types[last_index] = false;
+    return ((char *) s)[i];
   }
+}
 
-  for (int i = last_index - 1; i >= 0; --i) {
-    if (str[i] < str[i + 1]) {
-      types[i] = true;
-    } else if (str[i] > str[i + 1]) {
-      types[i] = false;
+// Creates a type array, true means S-Type, false means L-Type.
+void type_array(const char *s, bool *types, int n, int cs) {
+  types[n - 1] = S_TYPE;
+  types[n - 2] = L_TYPE;
+
+  for (int i = n - 3; i >= 0; --i) {
+    if (chr(s, i, cs) < chr(s, i + 1, cs)) {
+      types[i] = S_TYPE;
+    } else if (chr(s, i, cs) > chr(s, i + 1, cs)) {
+      types[i] = L_TYPE;
     } else {
       types[i] = types[i + 1];
     }
   }
 }
 
-bool is_lms(bool *types, unsigned int i) {
-  if(i > 0 && types[i] && !types[i - 1]) {
+inline bool is_lms(bool *types, int i) {
+  if(i > 0 && types[i] == S_TYPE && types[i - 1] == L_TYPE) {
     return true;
   } else {
     return false;
@@ -34,13 +33,16 @@ bool is_lms(bool *types, unsigned int i) {
 }
 
 // finds the head (end == false) or tail (end == true) index of each character
-void get_buckets(std::string &s, unsigned int *buckets, unsigned int alphabet_size, bool end) {
+void get_buckets(const char *s, int n, int *buckets, int alphabet_size, bool end, int cs) {
   unsigned int sum = 0;
-  // compute bucket sizes
-  for (unsigned int i = 0; i < s.size(); ++i) {
-    buckets[static_cast<unsigned char>(s[i])]++;
+  for (int i = 0; i <= alphabet_size; ++i) {
+    buckets[i] = 0;
   }
-  for (unsigned int i = 0; i < alphabet_size; ++i) {
+  // compute bucket sizes
+  for (int i = 0; i < n; ++i) {
+    buckets[chr(s, i, cs)]++;
+  }
+  for (int i = 0; i <= alphabet_size; ++i) {
     sum += buckets[i];
     if (end) {
       buckets[i] = sum;
@@ -50,9 +52,35 @@ void get_buckets(std::string &s, unsigned int *buckets, unsigned int alphabet_si
   }
 }
 
-int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabet_size, unsigned int character_size) {
+void induce_sa_l(const char *s, int *SA, int n, bool *types, int *buckets, int alphabet_size, int cs) {
+  // find starts of buckets
+  get_buckets(s, n, buckets, alphabet_size, false, cs);
+  int tmp;
+  for (int i = 0; i < n; ++i) {
+    tmp = SA[i] - 1;
+    if (tmp >= 0 && types[tmp] == L_TYPE) {
+      SA[buckets[chr(s, tmp, cs)]] = tmp;
+      buckets[chr(s, tmp, cs)]++;
+    }
+  }
+}
 
-  if (SA == NULL) {
+void induce_sa_s(const char *s, int *SA, int n, bool *types, int *buckets, int alphabet_size, int cs) {
+  // find ends of buckets
+  get_buckets(s, n, buckets, alphabet_size, true, cs);
+  int tmp;
+  for (int i = n - 1; i >= 0; --i) {
+    tmp = SA[i] - 1;
+    if (tmp >= 0 && types[tmp] == S_TYPE) {
+      buckets[chr(s, tmp, cs)]--;
+      SA[buckets[chr(s, tmp, cs)]] = tmp;
+    }
+  }
+}
+
+int sa_is(const char *s, int *SA, int n, int alphabet_size, int cs) {
+
+  if (SA == NULL || n < 0 || alphabet_size < 1) {
     return -1;
   }
 
@@ -63,45 +91,132 @@ int sa_is(std::string &s, unsigned int *SA, unsigned int n, unsigned int alphabe
     return 0;
   }
 
+  /*
+  * STAGE 1: reduce the problem by at least 1/2
+  */
+
   bool *types = new bool[n];
-  unsigned int *buckets = new unsigned int[alphabet_size](); // used for storing starts and ends of buckets
+  int *buckets = new int[alphabet_size + 1]();
 
-  type_array(s, types);
-  get_buckets(s, buckets, alphabet_size, true);
+  type_array(s, types, n, cs);
 
-  for (unsigned int i = 0; i < n; ++i) {
-    SA[i] = 0;
+  // std::cout << std::endl << s << std::endl;
+  // for (int i = 0; i < n; ++i) {
+  //   std::cout << (types[i] ? "S" : "L");
+  // }
+  // std::cout << std::endl;
+  // for (int i = 0; i < n; ++i) {
+  //   std::cout << (is_lms(types, i) ? "*" : " ");
+  // }
+  // std::cout << std::endl;
+
+  get_buckets(s, n, buckets, alphabet_size, true, cs);
+
+  for (int i = 0; i < n; ++i) {
+    SA[i] = -1;
   }
 
-  for (unsigned int i = 1; i < n; ++i) {
+  for (int i = 1; i < n; ++i) {
     if (is_lms(types, i)) {
-      buckets[static_cast<unsigned char>(s[i])]--;
-      SA[buckets[static_cast<unsigned char>(s[i])]] = i;
+      buckets[chr(s, i, cs)]--;
+      SA[buckets[chr(s, i, cs)]] = i;
     }
   }
 
-  // TODO induce SA L-type
-  // TODO induce SA S-type
+  induce_sa_l(s, SA, n, types, buckets, alphabet_size, cs);
+  induce_sa_s(s, SA, n, types, buckets, alphabet_size, cs);
 
-  // TEST CODE START
+  delete[] buckets;
 
-  std::vector<int> lms_substrs(n); // Definition 3.4: (Sample Pointer Array) P1
-  std::vector<int> s1(n); // zero-initialized
-
-  std::cout << std::endl << s << std::endl;
-  for (unsigned int i = 0; i < s.size(); ++i) {
-    std::cout << (types[i] ? "S" : "L");
-  }
-  std::cout << std::endl;
-  for (unsigned int i = 0; i < n; ++i) {
-    std::cout << (is_lms(types, i) ? "*" : " ");
-    if(i < (n - 1) && is_lms(types, i)) {
-      lms_substrs.push_back(i);
+  // compact all the sorted substrings into the first n1 items of SA
+  int n1 = 0;
+  for (int i = 0; i < n; ++i) {
+    if (is_lms(types, SA[i])) {
+      SA[n1] = SA[i];
+      n1++;
     }
   }
-  std::cout << std::endl;
 
-  // TEST CODE END
+  for (int i = n1; i < n; ++i) {
+    SA[i] = -1;
+  }
+
+  int name = 0, prev = -1;
+  for (int i = 0; i < n1; ++i) {
+    int pos = SA[i];
+    bool diff = false;
+    for (int d = 0; d < n; ++d) {
+      if (prev == -1
+        || chr(s, pos + d, cs) != chr(s, prev + d, cs)
+        || types[pos + d] != types[prev + d]) {
+        diff = true;
+        break;
+      } else if (d > 0 && (is_lms(types, pos + d) || is_lms(types, prev + d))) {
+        break;
+      }
+    }
+
+    if (diff) {
+      name++;
+      prev = pos;
+    }
+    pos /= 2;
+    SA[n1 + pos] = name - 1;
+  }
+
+  for (int i = n - 1, j = n - 1; i >= n1; --i) {
+    if (SA[i] >= 0) {
+      SA[j] = SA[i];
+      j--;
+    }
+  }
+
+  /*
+  * STAGE 2: solve the reduced problem
+  */
+
+  int *SA1 = SA;
+  int *s1 = SA + n - n1;
+
+  if (name < n1) {
+    sa_is((char *)s1, SA1, n1, name - 1, sizeof(int));
+  } else {
+    for (int i = 0; i < n1; ++i) {
+      SA1[s1[i]] = i;
+    }
+  }
+
+  /*
+  * STAGE 3: induce the result for the original problem
+  */
+
+  buckets = new int[alphabet_size + 1]();
+  get_buckets(s, n, buckets, alphabet_size, true, cs);
+
+  for (int i = 1, j = 0; i < n; ++i) {
+    if (is_lms(types, i)) {
+      s1[j] = i;
+      j++;
+    }
+  }
+
+  for (int i = 0; i < n1; ++i) {
+    SA1[i] = s1[SA1[i]];
+  }
+
+  for (int i = n1; i < n; ++i) {
+    SA[i] = -1;
+  }
+
+  for (int i = n1 - 1, j = 0; i >= 0; --i) {
+    j = SA[i];
+    SA[i] = -1;
+    buckets[chr(s, j, cs)]--;
+    SA[buckets[chr(s, j, cs)]] = j;
+  }
+
+  induce_sa_l(s, SA, n, types, buckets, alphabet_size, cs);
+  induce_sa_s(s, SA, n, types, buckets, alphabet_size, cs);
 
   // deallocate all memory to prevent leaks
   delete[] types;
