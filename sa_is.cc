@@ -1,6 +1,6 @@
 #include "sa_is.h"
 
-int chr(const char *s, int i, int cs) {
+inline int chr(const char *s, int i, int cs) {
   if (cs == sizeof(int)) {
     return ((int *) s)[i];
   } else {
@@ -24,7 +24,7 @@ void type_array(const char *s, bool *types, int n, int cs) {
   }
 }
 
-bool is_lms(bool *types, int i) {
+inline bool is_lms(bool *types, int i) {
   if(i > 0 && types[i] == S_TYPE && types[i - 1] == L_TYPE) {
     return true;
   } else {
@@ -201,7 +201,6 @@ int sa_is(const char *s, int *SA, int n, int alphabet_size, int cs) {
   }
 
   for (int i = 0; i < n1; ++i) {
-    // std::cout << SA1[i] << " " << n1 << std::endl;
     SA1[i] = s1[SA1[i]];
   }
 

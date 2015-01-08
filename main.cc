@@ -7,8 +7,6 @@
 
 #include "sa_is.h"
 
-#define TERMINATION_CHAR '$'
-
 struct suffix {
   unsigned int index;
   std::string suffix_string;
