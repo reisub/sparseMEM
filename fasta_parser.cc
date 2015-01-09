@@ -8,7 +8,7 @@
 
 // Concatenate new sequences to set, keep track of lengths.
 // NOTE: Concatenation using the '`' character to separate strings!
-void fasta_parser(string filename, string &S, vector<string> &descr, vector<long> &startpos) {
+void fasta_parser(string filename, string &output_string, vector<string> &meta_data, vector<long> &startpos) {
 	string meta, line;
 	long length = 0;
 
@@ -33,11 +33,11 @@ void fasta_parser(string filename, string &S, vector<string> &descr, vector<long
 			
 			for(long i = start; i <= end; i++) { if(line[i] == ' ') break; meta += line[i]; }
 
-			descr.push_back(meta);
+			meta_data.push_back(meta);
 
-			S += '`'; // ` character used to separate strings
-			startpos.push_back(S.length()-1);
-			cout << S.length() <<endl;
+			output_string += '`'; // ` character used to separate strings
+			startpos.push_back(output_string.length()-1);
+			cout << output_string.length() <<endl;
 
 		  // Reset parser state.
 		  start = 0; meta = ""; length = 0;
@@ -47,17 +47,17 @@ void fasta_parser(string filename, string &S, vector<string> &descr, vector<long
 		else { // Collect sequence data.
 		 
 		for(long i = 0; i <= end; i++) { 
-			S += (line[i]);
+			output_string += (line[i]);
 			}
 		}
 	}
 
-	S.erase(S.begin());
+	output_string.erase(output_string.begin());
 	startpos.erase(startpos.begin());
 
-	cerr << "# S.length=" << S.length() << endl;
-	for(long i = 0; i < (long)descr.size(); i++) {
-		cerr << "# " << descr[i] << " " << startpos[i] << endl;
+	cerr << "# output_string.length=" << output_string.length() << endl;
+	for(long i = 0; i < (long)meta_data.size(); i++) {
+		cerr << "# " << meta_data[i] << " " << startpos[i] << endl;
 	}
 
 }
