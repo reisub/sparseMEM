@@ -36,22 +36,35 @@ void suffix_array(std::string str, std::vector<int> &sa) {
 
 int main(int argc, char *argv[]) {
 
-  if(argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <file containing reference string>" << std::endl;
+  if(argc != 5) {
+    std::cerr << "Usage: " << argv[1] << " <file containing reference string>" << std::endl;
+		std::cerr << "Usage: " << argv[2] << " <file containing query string>" << std::endl;
+		std::cerr << "Usage: " << argv[3] << " <index level of sparseSA, K-SA>" << std::endl;
+		std::cerr << "Usage: " << argv[4] << " <size of minimal match>" << std::endl;
+	 
     exit(-1);
   }
 
   std::ifstream ref_file(argv[1]);
+	std::ifstream query_file(argv[2]);
 
   if(!ref_file.is_open()) {
     std::cerr << "There was a problem openning the file \"" << argv[1] << "\"!\nAborting." << std::endl;
     exit(-2);
   }
 
+  if(!query_file.is_open()) {
+    std::cerr << "There was a problem openning the file \"" << argv[2] << "\"!\nAborting." << std::endl;
+    exit(-2);
+  }
+
   std::string ref_string;
   std::getline(ref_file, ref_string);
-
   std::cout << "String: " << ref_string << std::endl;
+
+	std::string query_string;
+  std::getline(query_file, query_string);
+  std::cout << "Query: " << query_string << std::endl;
 
   std::vector<int> sa;
   sa.reserve(ref_string.size());
@@ -69,7 +82,7 @@ int main(int argc, char *argv[]) {
 
   sa_is(ref_string.c_str(), SA, ref_string.size(), 256, sizeof(char));
 
-  for (int i = 0; i < ref_string.size(); ++i) {
+  for (unsigned int i = 0; i < ref_string.size(); ++i) {
     printf("%d ", SA[i]);
     if (SA[i] != sa[i]) {
       std::cout << "<-!!! ";
