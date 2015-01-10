@@ -6,6 +6,8 @@
 #include "fasta_parser.h"
 
 
+
+
 // Concatenate new sequences to set, keep track of lengths.
 // NOTE: Concatenation using the '`' character to separate strings!
 void fasta_parser(string filename, string &output_string, vector<string> &meta_data, vector<long> &startpos) {
