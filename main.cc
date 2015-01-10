@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 
+#include "fasta_parser.h"
 #include "sa_is.h"
 
 struct suffix {
@@ -58,14 +59,23 @@ int main(int argc, char *argv[]) {
     exit(-2);
   }
 
-  std::string ref_string;
-  std::getline(ref_file, ref_string);
-  std::cout << "String: " << ref_string << std::endl;
+	std::string ref_string;
+ // std::getline(ref_file, ref_string);
+ // std::cout << "String: " << ref_string << std::endl;
+	std::vector<string> refdescr; 
+	std::vector<long> startpos;
 
+	fasta_parser(ref_file, ref_string, refdescr, startpos);
+	
+	
 	std::string query_string;
   std::getline(query_file, query_string);
   std::cout << "Query: " << query_string << std::endl;
+	
+  	
 
+  
+  
   std::vector<int> sa;
   sa.reserve(ref_string.size());
   bool *types = new bool[ref_string.size()];
