@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
   // Read in query string (fasta format)
 	std::string query_string;
 	std::vector<string> querydescr;
-	std::vector<int> q_startpos;
+	std::vector<long> q_startpos;
   fasta_parser(argv[2], query_string, querydescr, q_startpos);
 
   int K = atoi(argv[3]);
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
   A_ = C_ = T_ = G_ = BROJ =0;
   // Creates Suffix Array using SA_IS algorithm
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
-  for (i=0; i<N; i++){
+  for (int i=0; i<N; i++){
 	if (ref_string.substr(sa[i]) == 'A') A_++;
 	if (ref_string.substr(sa[i]) == 'C') C_++;
 	if (ref_string.substr(sa[i]) == 'T') T_++;
@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
 	//sparseSA[i] = SA[i * K];
   }
   
-  BROJ_ = j;
+  BROJ = j;
 
   
   
