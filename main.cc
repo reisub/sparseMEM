@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
   
   // Generate ISA A
   for(int i = 0; i < j; i++) {
-		sparseISA[sparseSA[i]/K] = i;
+		sparseISA[sparseSA[i]] = i;
   }
 
   // Generate LCP
