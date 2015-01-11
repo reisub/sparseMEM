@@ -107,22 +107,22 @@ int main(int argc, char *argv[]) {
   int j =0;
   for (int i = 1; i < N; ++i) {
   
-    if(A_>K){
+    if(A_>=K){
 		sparseSA[j] = SA[i * K];
 		A_ = A_-K;
 	}
 	
-	else if (C_>K){
+	else if (C_>=K){
 		sparseSA[j] = SA[i * K + A_];
 		C_ = C_-K;
 	}
 	
-	else if (T_>K){
+	else if (T_>=K){
 		sparseSA[j] = SA[i * K + A_ + C_];
 		T_ = T_-K;
 	}
 	
-	else if (G_ >K){
+	else if (G_ >=K){
 		sparseSA[j] = SA[i * K + A_ + C_ + T_];
 		G_ = G_ -K;
 	}
