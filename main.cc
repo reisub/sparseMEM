@@ -142,17 +142,17 @@ int main(int argc, char *argv[]) {
   }
   cout << endl;
   // Generate ISA A
-  for(int i = 0; i < j; i++) {
-		sparseISA[sparseSA[i] % (j-1)] = i;
+  for(int i = 0; i < N/K - 1 ; i++) {
+		sparseISA[sparseSA[i] / K] = i;
   }
 cout << endl;
-  for(int i = 0; i < j; i++) {
-    cout << sparseISA[sparseSA[i] % (j-1)] << " ";
+  for(int i = 0; i < N/K -1; i++) {
+    cout << sparseISA[sparseSA[i] / K] << " ";
   }
 
   // Generate LCP
   int h = 0;
-  for(int i = 0; i < N/K ; i+=K) {
+  for(int i = 0; i < N/K - 1 ; i+=K) {
     int m = sparseISA[i];
     if(m==0) {
       sparseLCP[m] = 0;
