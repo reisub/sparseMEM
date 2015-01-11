@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 		std::cerr << "Usage: " << argv[2] << " <file containing query string>" << std::endl;
 		std::cerr << "Usage: " << argv[3] << " <index level of sparseSA, K-SA>" << std::endl;
 		std::cerr << "Usage: " << argv[4] << " <size of minimal match>" << std::endl;
-	 
+
     exit(-1);
   }
 
@@ -62,20 +62,15 @@ int main(int argc, char *argv[]) {
 	std::string ref_string;
  // std::getline(ref_file, ref_string);
  // std::cout << "String: " << ref_string << std::endl;
-	std::vector<string> refdescr; 
+	std::vector<string> refdescr;
 	std::vector<long> startpos;
 
-	fasta_parser(ref_file, ref_string, refdescr, startpos);
-	
-	
+	fasta_parser(argv[1], ref_string, refdescr, startpos);
+
 	std::string query_string;
   std::getline(query_file, query_string);
   std::cout << "Query: " << query_string << std::endl;
-	
-  	
 
-  
-  
   std::vector<int> sa;
   sa.reserve(ref_string.size());
   bool *types = new bool[ref_string.size()];
