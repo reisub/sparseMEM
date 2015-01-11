@@ -21,7 +21,7 @@ void findL (int p, int i, int q, string &S, string &P, int K, int L);
 
 void collect_MEMs (int p, interval_t SA_i, interval_t MEM, string &S, string &P, int *SA, int *LCP, int K, int N, int L);
 
-void print_MEM (int query_index, int ref_string_index, int length, string &S);
+void print_MEM (int query_index, int ref_string_index, int length);
 
 void MEM(int p0, string &S, int *ISA, int *LCP, int *SA, string &query, int K, int N, int L);
 

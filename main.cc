@@ -60,40 +60,43 @@ int main(int argc, char *argv[]) {
     exit(-2);
   }
 
+  // Read in reference string (fasta format)
 	std::string ref_string;
 	std::vector<string> refdescr;
 	std::vector<long> startpos;
-
 	fasta_parser(argv[1], ref_string, refdescr, startpos);
 
-	int K = atoi(argv[3]);
+  // Read in query string (fasta format)
+	std::string query_string;
+	std::vector<string> querydescr;
+	std::vector<long> q_startpos;
+  fasta_parser(argv[2], query_string, querydescr, q_startpos);
+
+  int K = atoi(argv[3]);
   int L = atoi(argv[4]);
   int N = ref_string.length();
-
-	std::string query_string;
-  std::getline(query_file, query_string);
-  std::cout << "Query: " << query_string << std::endl;
-
+  
   std::vector<int> sa;
-  sa.reserve(ref_string.size());
-  bool *types = new bool[ref_string.size()];
+  sa.reserve(N);
+  bool *types = new bool[N];
 
   suffix_array(ref_string, sa);
-  type_array(ref_string.c_str(), types, ref_string.size(), sizeof(char));
-
-  for (unsigned int i = 0; i < sa.size(); ++i) {
+  type_array(ref_string.c_str(), types, N, sizeof(char));
+  
+  for (unsigned int i = 0; i < sa.size() - 1; ++i) {
     std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t")
     << ref_string.substr(sa[i]) << std::endl;
   }
 
   int *SA = new int[N];
   int *sparseSA = new int[N / K];
-  int *ISA = new int[N];
+  int *ISA = new int[N / K];
   int *LCP = new int[N / K];
 
   // Creates Suffix Array using SA_IS algorithm
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
 
+  
   // Generate Sparse Suffix Array
   for (int i = 0; i < N / K; ++i) {
     sparseSA[i] = SA[i * K];
@@ -106,7 +109,7 @@ int main(int argc, char *argv[]) {
 
   // Generate LCP
   int h = 0;
-  for(int i = 0; i < N; i+=K) {
+  for(int i = 0; i < N ; i+=K) {
     int m = ISA[i/K];
     if(m==0) {
       LCP[m] = 0;
@@ -132,10 +135,11 @@ int main(int argc, char *argv[]) {
   printf("\nLCP: ");
   for (int i = 0; i < N; ++i)
     printf("%d ", LCP[i]);
-  printf("\n\n");
+  printf("\n");
 
 
   // Search for MEMs:
+  printf("\tRef.\tQuery\tLength\n");
   int p0 = 0;
   MEM(p0, ref_string, ISA, LCP, SA, query_string, K, N, L);
   

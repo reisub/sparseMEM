@@ -146,24 +146,19 @@ interval_t traverse(int query_index, interval_t interval, int size, string &S, i
 	return interval;
 }
 
-void print_MEM (int query_index, int ref_string_index, int length, string &S){
- printf ("%c", '>');
-  for (int i = query_index; i <= length; i += 1) {
-    printf ("%c", S[i]);
-  }
-  printf ("\n");
-  
+void print_MEM (int query_index, int ref_string_index, int length){
+ printf("\t%d\t%d\t%d\n", query_index, ref_string_index, length); 
 } 
 
 void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L) { // K is step, K-SA
 	for (int k = 0; k <= K - 1 ; k += 1){
 		if (query_index == 0 or ref_string_index == 0){
-		  print_MEM (query_index + 1, ref_string_index, length, S); // TODO. Why " +1 " ???
+		  print_MEM (query_index + 1, ref_string_index, length + 1); 
 			return ;	
 		}
 		
 		if (query[query_index - 1] != S[ref_string_index - 1] and length >= L){
-			print_MEM (query_index + 1, ref_string_index, length, S); // TODO. Why " +1 " ???
+			print_MEM (query_index + 1, ref_string_index, length + 1); 
 			return ;
 		}
 
