@@ -88,19 +88,32 @@ int main(int argc, char *argv[]) {
   int *sparseSA = new int[N / K];
   int *sparseISA = new int[N / K];
   int *sparseLCP = new int[N / K];
-
+  short unsigned int A_, C_, T_, G_, BROJ;
+  A_ = C_ = T_ = G_ = BROJ =0;
   // Creates Suffix Array using SA_IS algorithm
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
+  for (i=0; i<N; i++){
+	if (ref_string.substr(sa[i]) == 'A') A_++;
+	if (ref_string.substr(sa[i]) == 'C') C_++;
+	if (ref_string.substr(sa[i]) == 'T') T_++;
+	if (ref_string.substr(sa[i]) == 'G') G_++;	
+  }
 
-
-  // Generate Sparse Suffix Array
+  // Generate Sparse Suffix Array, A, C, T, G
   for (int i = 0; i < N / K; ++i) {
     sparseSA[i] = SA[i * K];
   }
 
-  // Generate ISA
+  // Generate ISA A
   for(int i = 0; i < N/K; i++) {
-    sparseISA[sparseSA[i]/K] = i;
+	
+	if (A_>=3)
+		sparseISA[sparseSA[i]/K] = i;
+	
+	
+	
+	
+	BROJ ++;
   }
 
   // Generate LCP
