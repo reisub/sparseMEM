@@ -82,16 +82,16 @@ int main(int argc, char *argv[]) {
 
   suffix_array(ref_string, sa);
   type_array(ref_string.c_str(), types, N, sizeof(char));
-  /*
-  for (unsigned int i = 0; i < sa.size() - 1; ++i) {
+
+  for (unsigned int i = 0; i < sa.size() ; ++i) {
     std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t")
     << ref_string.substr(sa[i]) << std::endl;
   }
-  */
+  
   int *SA = new int[N];
-  int *sparseSA = new int[N / K + 1];
-  int *sparseISA = new int[N / K + 1];
-  int *sparseLCP = new int[N / K + 1];
+  int *sparseSA = new int[N / K];
+  int *sparseISA = new int[N / K];
+  int *sparseLCP = new int[N / K];
 
   // Creates Suffix Array using SA_IS algorithm
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
