@@ -88,8 +88,8 @@ int main(int argc, char *argv[]) {
   int *sparseSA = new int[N / K];
   int *sparseISA = new int[N / K];
   int *sparseLCP = new int[N / K];
-  short unsigned int A_, C_, T_, G_, BROJ;
-  A_ = C_ = T_ = G_ = BROJ =0;
+  short int A_, C_, T_, G_, BROJ;
+  A_ = C_ = T_ = G_ = BROJ = 0;
   // Creates Suffix Array using SA_IS algorithm
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
   for (int i = 0; i < N; i++){
@@ -108,22 +108,23 @@ int main(int argc, char *argv[]) {
   for (int i = 1; i < N; ++i) {
   
     if(A_>=K){
-		sparseSA[j] = SA[i * K] - (K-1);
+		sparseSA[j] = SA[i * K  - (K-1)];
 		A_ = A_-K;
+cout << A_ << endl;
 	}
 	
 	else if (C_>=K){
-		sparseSA[j] = SA[i * K + A_] - (K-1);
+		sparseSA[j] = SA[i * K + A_  - (K-1)];
 		C_ = C_-K;
 	}
 	
 	else if (T_>=K){
-		sparseSA[j] = SA[i * K + A_ + C_] - (K-1);
+		sparseSA[j] = SA[i * K + A_ + C_  - (K-1)];
 		T_ = T_-K;
 	}
 	
 	else if (G_ >=K){
-		sparseSA[j] = SA[i * K + A_ + C_ + T_] - (K-1);
+		sparseSA[j] = SA[i * K + A_ + C_ + T_  - (K-1)];
 		G_ = G_ -K;
 	}
 	
@@ -135,10 +136,11 @@ int main(int argc, char *argv[]) {
   
   BROJ = j;
 
+
     for(int i = 0; i < j; i++) {
-		cout << sparseSA[i];
+		cout << sparseSA[i] << " ";
   }
-  
+  cout << endl; 
   // Generate ISA A
   for(int i = 0; i < j; i++) {
 		sparseISA[sparseSA[i]] = i;
