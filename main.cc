@@ -59,19 +59,19 @@ int main(int argc, char *argv[]) {
   // Read in reference string (fasta format)
 	std::string ref_string;
 	std::vector<string> refdescr;
-	std::vector<long> startpos;
+	std::vector<int> startpos;
 	fasta_parser(argv[1], ref_string, refdescr, startpos);
 
   // Read in query string (fasta format)
 	std::string query_string;
 	std::vector<string> querydescr;
-	std::vector<long> q_startpos;
+	std::vector<int> q_startpos;
   fasta_parser(argv[2], query_string, querydescr, q_startpos);
 
   int K = atoi(argv[3]);
   int L = atoi(argv[4]);
   int N = ref_string.length();
-  
+
   std::vector<int> sa;
   sa.reserve(N);
   bool *types = new bool[N];
@@ -83,24 +83,63 @@ int main(int argc, char *argv[]) {
     std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t")
     << ref_string.substr(sa[i]) << std::endl;
   }
-  
+
   int *SA = new int[N];
   int *sparseSA = new int[N / K];
   int *sparseISA = new int[N / K];
   int *sparseLCP = new int[N / K];
-
+  short unsigned int A_, C_, T_, G_, BROJ;
+  A_ = C_ = T_ = G_ = BROJ =0;
   // Creates Suffix Array using SA_IS algorithm
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
-
-  
-  // Generate Sparse Suffix Array
-  for (int i = 0; i < N / K; ++i) {
-    sparseSA[i] = SA[i * K];
+  for (i=0; i<N; i++){
+	if (ref_string.substr(sa[i]) == 'A') A_++;
+	if (ref_string.substr(sa[i]) == 'C') C_++;
+	if (ref_string.substr(sa[i]) == 'T') T_++;
+	if (ref_string.substr(sa[i]) == 'G') G_++;	
   }
 
-  // Generate ISA
-  for(long i = 0; i < N/K; i++) {
-    sparseISA[sparseSA[i]/K] = i;
+  
+  sparseSA[0] = SA[0 * K];
+  
+  
+  // Generate Sparse Suffix Array, A, C, T, G
+  int j =0;
+  for (int i = 1; i < N; ++i) {
+  
+    if(A_>K){
+		sparseSA[j] = SA[i * K];
+		A_ = A_-K;
+	}
+	
+	else if (C_>K){
+		sparseSA[j] = SA[i * K + A_];
+		C_ = C_-K;
+	}
+	
+	else if (T_>K){
+		sparseSA[j] = SA[i * K + A_ + C_];
+		T_ = T_-K;
+	}
+	
+	else if (G_ >K){
+		sparseSA[j] = SA[i * K + A_ + C_ + T_];
+		G_ = G_ -K;
+	}
+	
+	else break;
+    
+	j++;
+	//sparseSA[i] = SA[i * K];
+  }
+  
+  BROJ_ = j;
+
+  
+  
+  // Generate ISA A
+  for(int i = 0; i < N/K; i++) {
+		sparseISA[sparseSA[i]/K] = i;
   }
 
   // Generate LCP
@@ -123,11 +162,11 @@ int main(int argc, char *argv[]) {
   printf("\nSparse SA: ");
   for (int i = 0; i < N/K; ++i)
     printf("%d ", sparseSA[i]);
-    
+
   printf("\nSparse ISA: ");
   for (int i = 0; i < N/K; ++i)
     printf("%d ", sparseISA[i]);
-    
+
   printf("\nSparse LCP: ");
   for (int i = 0; i < N/K; ++i)
     printf("%d ", sparseLCP[i]);
@@ -138,7 +177,7 @@ int main(int argc, char *argv[]) {
   printf("\tRef.\tQuery\tLength\n");
   int p0 = 0;
   MEM(p0, ref_string, sparseISA, sparseLCP, sparseSA, query_string, K, N, L);
-  
+
   return 0;
 }
 
