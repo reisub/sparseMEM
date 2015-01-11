@@ -145,6 +145,10 @@ int main(int argc, char *argv[]) {
   for(int i = 0; i < j; i++) {
 		sparseISA[sparseSA[i]] = i;
   }
+cout << endl;
+  for(int i = 0; i < j; i++) {
+    cout << sparseISA[sparseSA[i]] << " ";
+  }
 
   // Generate LCP
   int h = 0;
