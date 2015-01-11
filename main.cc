@@ -121,18 +121,18 @@ int main(int argc, char *argv[]) {
     h = std::max(0, h - K);
   }
 
-  printf("\n SA: ");
+  printf("\nSA: ");
   for (int i = 0; i < N; ++i)
     printf("%d ", SA[i]);
     
-  printf("\n ISA: ");
+  printf("\nISA: ");
   for (int i = 0; i < N; ++i)
     printf("%d ", ISA[i]);
     
-  printf("\n LCP: ");
+  printf("\nLCP: ");
   for (int i = 0; i < N; ++i)
     printf("%d ", LCP[i]);
-  printf("\n");
+  printf("\n\n");
 
 
   // Search for MEMs:

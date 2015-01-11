@@ -131,9 +131,8 @@ interval_t expand_link (interval_t interval, int *LCP, int K, int N) {
 
 interval_t traverse(int query_index, interval_t interval, int size, string &S, int *SA, string &query) {
 	interval_t triplet_tmp;
-	interval_t not_found = {-1, 0, 0};
  
-	while (query_index + interval.depth < query.length()) {
+	while (query_index + interval.depth < (signed) query.length()) {
 		triplet_tmp = topdown (query [query_index + interval.depth],	interval, S, SA);
 
 		if (triplet_tmp.depth == -1 )
@@ -148,24 +147,23 @@ interval_t traverse(int query_index, interval_t interval, int size, string &S, i
 }
 
 void print_MEM (int query_index, int ref_string_index, int length, string &S){
-  cout << '>';
+ printf ("%c", '>');
   for (int i = query_index; i <= length; i += 1) {
-    cout << S[i + 1];
+    printf ("%c", S[i]);
   }
-    
-  cout << '\n';
+  printf ("\n");
   
 } 
 
 void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L) { // K is step, K-SA
 	for (int k = 0; k <= K - 1 ; k += 1){
 		if (query_index == 0 or ref_string_index == 0){
-		  print_MEM (query_index, ref_string_index, length, S);
+		  print_MEM (query_index + 1, ref_string_index, length, S); // TODO. Why " +1 " ???
 			return ;	
 		}
 		
 		if (query[query_index - 1] != S[ref_string_index - 1] and length >= L){
-			print_MEM (query_index, ref_string_index, length, S);
+			print_MEM (query_index + 1, ref_string_index, length, S); // TODO. Why " +1 " ???
 			return ;
 		}
 
@@ -178,8 +176,6 @@ void findL (int query_index, int ref_string_index, int length, string &S, string
 
 
 void collect_MEMs (int curr_index, interval_t SA_i, interval_t MEM_i, string &S, string &query, int *SA, int *LCP, int K, int N, int L) {
-	int SA_start = SA_i.start;
-	int SA_end = SA_i.end;
 	int SA_index = SA_i.depth;
 	int MEM_start = MEM_i.start;
 	int MEM_end = MEM_i.end;
@@ -220,7 +216,7 @@ void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query,
 
   if (L < K) return;
   
-	while (curr_index < (query.length() - (K - query_index))) {
+	while (curr_index < (N - (K - query_index))) {
 		SA_interval = traverse (curr_index, SA_interval, L - (K - 1), S, SA, query);
 		MEM_interval = traverse (curr_index, MEM_interval, query.length(), S, SA, query);
 
