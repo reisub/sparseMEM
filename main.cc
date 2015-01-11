@@ -39,11 +39,7 @@ void suffix_array(std::string str, std::vector<int> &sa) {
 int main(int argc, char *argv[]) {
 
   if(argc != 5) {
-    std::cerr << "Usage: " << argv[1] << " <file containing reference string>" << std::endl;
-		std::cerr << "Usage: " << argv[2] << " <file containing query string>" << std::endl;
-		std::cerr << "Usage: " << argv[3] << " <index level of sparseSA, K-SA>" << std::endl;
-		std::cerr << "Usage: " << argv[4] << " <size of minimal match>" << std::endl;
-
+    std::cerr << "Usage: " << argv[0] << " <file containing reference string> <file containing query string> <index level of sparseSA, K-SA> <size of minimal match>" << std::endl;
     exit(-1);
   }
 
