@@ -7,6 +7,7 @@
 
 #include "fasta_parser.h"
 #include "sa_is.h"
+#include "search.h"
 
 struct suffix {
   unsigned int index;
@@ -103,6 +104,7 @@ int main(int argc, char *argv[]) {
     ISA[SA[i]/K] = i;
   }
 
+  // Generate LCP
   int h = 0;
   for(int i = 0; i < N; i+=K) {
     int m = ISA[i/K];
@@ -119,13 +121,25 @@ int main(int argc, char *argv[]) {
     h = std::max(0, h - K);
   }
 
-  for (int i = 0; i < N; ++i) {
+  printf("\n SA: ");
+  for (int i = 0; i < N; ++i)
     printf("%d ", SA[i]);
-    if (SA[i] != sa[i]) {
-      std::cout << "<-!!! ";
-    }
-  }
+    
+  printf("\n ISA: ");
+  for (int i = 0; i < N; ++i)
+    printf("%d ", ISA[i]);
+    
+  printf("\n LCP: ");
+  for (int i = 0; i < N; ++i)
+    printf("%d ", LCP[i]);
   printf("\n");
 
+
+  // Search for MEMs:
+  int p0 = 0;
+  MEM(p0, ref_string, ISA, LCP, SA, query_string, K, N, L);
+  
   return 0;
 }
+
+

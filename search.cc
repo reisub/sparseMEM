@@ -129,29 +129,6 @@ interval_t expand_link (interval_t interval, int *LCP, int K, int N) {
 }
 
 
-
-interval_t search_string (string &S, int *SA, string &query_string) {
-	int query_index = 0;
-	int start = 0;
-	int end = 11; 
-	interval_t triplet;
-		
-	while (query_index < query_string.length()) {
-		triplet = topdown (query_string[query_index], {query_index, start, end}, S, SA);
- 
-		if (triplet.depth == -1) {
-			return {0, 0};		
-		}
-		
-		query_index = triplet.depth;
-		start = triplet.start;
-		end = triplet.end;
-	}
-
-	return {triplet.depth, triplet.start, triplet.end};
-}
-
-
 interval_t traverse(int query_index, interval_t interval, int size, string &S, int *SA, string &query) {
 	interval_t triplet_tmp;
 	interval_t not_found = {-1, 0, 0};
@@ -213,7 +190,7 @@ void collect_MEMs (int curr_index, interval_t SA_i, interval_t MEM_i, string &S,
 
 	while (MEM_index >= SA_index) { 
 		if (MEM_end + 1 < N/K) {
-			MEM_index = MAX2 (LCP[MEM_start], LCP[MEM_end + 1]);
+			MEM_index = max (LCP[MEM_start], LCP[MEM_end + 1]);
 		} else {
 		  MEM_index = LCP[MEM_start];
 		}

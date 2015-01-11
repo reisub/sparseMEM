@@ -1,11 +1,6 @@
-
+#include <string>
 
 using namespace std;
-
-#define COUNTOF(x) (sizeof(x)/sizeof(x[0]))
-#define MAX2(x,y) ((x) > (y)) ? (x) : (y)
-#define MAX3(x,y,z) ((x) > (z)) ? MAX2((x), (y)) : MAX2((z),(y))
-
 
 struct interval_t {
   int depth;
