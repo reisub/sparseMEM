@@ -9,19 +9,19 @@ using namespace std;
 * Searches input string (S) for suffixes having "cmp_char" at "q_offset",
 * using suffix array (SA).
 */
-long binary_search_left (string &S, long *SA, char cmp_char, triplet_t triplet) {
-	long offset = triplet.index;
-	long start = triplet.interval.start;
-	long end = triplet.interval.end;	
+long binary_search_left (char cmp_char, interval_t interval, string &S, long *SA) {
+	long depth = interval.depth;
+	long start = interval.start;
+	long end = interval.end;	
 	
-	if (cmp_char == S[SA[start] + offset]) {
+	if (cmp_char == S[SA[start] + depth]) {
 		return start;
 	}
 	
 	long middle;
 	while ((end - start) > 1) {
 		middle = (end + start) / 2;	
-		if (cmp_char <= S[SA[middle] + offset]) {
+		if (cmp_char <= S[SA[middle] + depth]) {
 			end = middle;		
 		} else {
 			start = middle;
@@ -36,19 +36,19 @@ long binary_search_left (string &S, long *SA, char cmp_char, triplet_t triplet) 
 * Searches input string (S) for suffixes having "cmp_char" at "q_offset",
 * using suffix array (SA).
 */
-long binary_search_right (string &S, long *SA, char cmp_char, triplet_t triplet) {
-	long offset = triplet.index;
-	long start = triplet.interval.start;
-	long end = triplet.interval.end;	
+long binary_search_right (char cmp_char, interval_t interval, string &S, long *SA) {
+	long depth = interval.depth;
+	long start = interval.start;
+	long end = interval.end;	
 
-	if (cmp_char == S[SA[end] + offset]){
+	if (cmp_char == S[SA[end] + depth]){
 		return end;
 	}
 	
 	long middle;
 	while ((end - start) > 1) {
 		middle = (end + start) / 2;	
-		if (cmp_char < S[SA[middle] + offset]) {
+		if (cmp_char < S[SA[middle] + depth]) {
 			end = middle;		
 		} else {
 			start = middle;
@@ -63,83 +63,69 @@ long binary_search_right (string &S, long *SA, char cmp_char, triplet_t triplet)
 * It uses binary_search to find both boundaries (in suffix array).
 */
 
-triplet_t topdown_search (string &S, long *SA, char cmp_char, triplet_t triplet) {
-	long offset = triplet.index;
-	long start = triplet.interval.start;
-	long end = triplet.interval.end;	
+interval_t topdown(char cmp_char, interval_t interval, string &S, long *SA) {
+	long offset = interval.depth;
+	long start = interval.start;
+	long end = interval.end;	
 	long lower_bound, upper_bound;
-	triplet_t not_found = {TOO_LOW, {0, 0}};
-	triplet_t found;
 
 	if (cmp_char < S[SA[start] + offset]){
-		return not_found;
+		return {-1, 0, 0};
 	}
 	if (cmp_char > S[SA[end] + offset]){
-		return not_found;
+		return {-1, 0, 0};
 	}
 
-	lower_bound = binary_search_left (S, SA, cmp_char, triplet);
-	upper_bound = binary_search_right (S, SA, cmp_char, triplet);
+	lower_bound = binary_search_left (cmp_char, interval, S, SA);
+	upper_bound = binary_search_right (cmp_char, interval, S, SA);
 	
-	if (lower_bound > upper_bound) {
-		return not_found;
+	if (lower_bound <= upper_bound) {
+		return {offset + 1, lower_bound, upper_bound};
 	}	
 
-	found = {offset + 1, {lower_bound, upper_bound}};
-	return found;
+	return {-1, 0, 0};
 }
 
 
-triplet_t suffix_link (long *ISA, long *SA, long *LCP, triplet_t triplet) {
-	long offset = triplet.index;
-	long start = triplet.interval.start;
-	long end = triplet.interval.end;
-
-	triplet_t empty_triplet = {TOO_LOW, {0, 0}};
+interval_t suffix_link (interval_t interval, long *ISA, long *SA, long *LCP) {
+	long offset = interval.depth;
+	long start = interval.start;
+	long end = interval.end;
 	
-	offset -= K;
-	if (offset <= 0) 
-		return empty_triplet;
+	offset = offset -  K;
+	if (offset <= 0) return {-1, 0, 0};
 
 	start = ISA[SA[start] / K + 1];
 	end = ISA[SA[end] / K + 1];
 
-	triplet = expand_link(LCP, {offset, {start, end}});
-	
-	return triplet; 
+	return expand_link({offset, start, end}, LCP); 
 }
 
-triplet_t expand_link (long *LCP, triplet_t triplet) {
-	long offset = triplet.index;
-	long start = triplet.interval.start;
-	long end = triplet.interval.end;	
-
-	triplet_t starting = {0, {0, N-1}};
-	triplet_t empty = {-1, {0, 0}};
-	triplet_t interval;
+interval_t expand_link (interval_t interval, long *LCP) {
+	long offset = interval.depth;
+	long start = interval.start;
+	long end = interval.end;	
 	
-	if (offset == 0) 
-		return starting;
+	if (offset == 0) return {0, 0, N - 1};
 
-	long T = 2 * offset * log(N);
+	long T = 2 * offset * (long)ceil(log(N/K) / log(2.0));
 	long e = 0;
 
-	while (start >= 0 and LCP[start] >= offset) {
-		start -= 1;		
+	while (start >= 0 and LCP[start] >= offset) {		
 		e += 1;
 		if (e >= T)
-			return 	empty;
+			return 	{-1, 0, 0};
+		start -= 1;
 	}
 
 	while (end <= (N - 1) and LCP[end + 1] >= offset) {
 		end += 1;		
 		e += 1;
 		if (e >= T)
-			return 	empty;	
+			return 	{-1, 0, 0};	
 	}
-	
-	interval = {offset, {start, end}};
-	return interval;
+	 
+	return {offset, start, end};
 }
 
 
@@ -147,46 +133,41 @@ triplet_t expand_link (long *LCP, triplet_t triplet) {
 interval_t search_string (string &S, long *SA, string &query_string) {
 	long query_index = 0;
 	long start = 0;
-	long end = COUNTOF(S); 
-	triplet_t triplet;
-	interval_t empty = {0, 0};
+	long end = 11; 
+	interval_t triplet;
 		
 	while (query_index < query_string.length()) {
-		triplet = topdown_search (S, SA, query_string[query_index], 
-					{ query_index, {start, end}} 
-				);
+		triplet = topdown (query_string[query_index], {query_index, start, end}, S, SA);
  
-		if (triplet.index == TOO_LOW) {
-			return empty;		
+		if (triplet.depth == TOO_LOW) {
+			return {0, 0};		
 		}
 		
-		query_index = triplet.index;
-		start = triplet.interval.start;
-		end = triplet.interval.end;
+		query_index = triplet.depth;
+		start = triplet.start;
+		end = triplet.end;
 	}
 
-	return triplet.interval;
+	return {triplet.depth, triplet.start, triplet.end};
 }
 
 
-triplet_t traverse(string &S, long *SA, string &query, long query_index, triplet_t triplet, long size) {
-	triplet_t triplet_tmp;
-	triplet_t not_found = {-1, {0, 0}};
+interval_t traverse(long query_index, interval_t interval, long size, string &S, long *SA, string &query) {
+	interval_t triplet_tmp;
+	interval_t not_found = {-1, 0, 0};
  
-	while (query_index + triplet.index < query.length()) {
-		triplet_tmp = topdown_search (S, SA, 
-						query [query_index + triplet.index],
-					 	triplet);
+	while (query_index + interval.depth < query.length()) {
+		triplet_tmp = topdown (query [query_index + interval.depth],	interval, S, SA);
 
-		if (triplet_tmp.index == TOO_LOW)
-			return not_found;	
+		if (triplet_tmp.depth == TOO_LOW)
+			return interval;	
 
-		triplet = triplet_tmp;
-		if (triplet.index >= size) 
+		interval = triplet_tmp;
+		if (interval.depth >= size) 
 			break;		
 	}
 	
-	return triplet;
+	return interval;
 }
 
 void print_MEM (long query_index, long ref_string_index, long length, string &S){
@@ -200,7 +181,7 @@ void print_MEM (long query_index, long ref_string_index, long length, string &S)
 } 
 
 void findL (long query_index, long ref_string_index, long length, string &S, string &query) { // K is step, K-SA
-	for (long k = 0; k < K; k += 1){
+	for (long k = 0; k <= K - 1 ; k += 1){
 		if (query_index == 0 or ref_string_index == 0){
 		  print_MEM (query_index, ref_string_index, length, S);
 			return ;	
@@ -219,15 +200,15 @@ void findL (long query_index, long ref_string_index, long length, string &S, str
 
 
 
-void collect_MEMs (long *SA, long *LCP, long curr_index, triplet_t SA_i, triplet_t MEM_i, string &S, string &query) {
-	long SA_start = SA_i.interval.start;
-	long SA_end = SA_i.interval.end;
-	long SA_index = SA_i.index;
-	long MEM_start = MEM_i.interval.start;
-	long MEM_end = MEM_i.interval.end;
-	long MEM_index = MEM_i.index;
+void collect_MEMs (long curr_index, interval_t SA_i, interval_t MEM_i, string &S, string &query, long *SA, long *LCP) {
+	long SA_start = SA_i.start;
+	long SA_end = SA_i.end;
+	long SA_index = SA_i.depth;
+	long MEM_start = MEM_i.start;
+	long MEM_end = MEM_i.end;
+	long MEM_index = MEM_i.depth;
 	
-	for (long i = MEM_start; i < MEM_end; i += 1)
+	for (long i = MEM_start; i <= MEM_end; i += 1)
 		findL (curr_index, SA[i], MEM_index, S, query);
 
 	while (MEM_index >= SA_index) { 
@@ -255,30 +236,30 @@ void collect_MEMs (long *SA, long *LCP, long curr_index, triplet_t SA_i, triplet
 *
 *
 */
-void find_MEMs(string &S, long *ISA, long *LCP, long *SA, string &query, long query_index) {
-	triplet_t SA_interval = {0, {0, N / K - 1}};
-	triplet_t MEM_interval = {0, {0, N / K - 1}};
+void MEM(long query_index, string &S, long *ISA, long *LCP, long *SA, string &query) {
+	interval_t SA_interval = {0, 0, N / K - 1};
+	interval_t MEM_interval = {0, 0, N / K - 1};
 	long curr_index = query_index;
 
 	while (curr_index < (query.length() - (K - query_index))) {
-		SA_interval = traverse (S, SA, query, curr_index, SA_interval, L - (K - 1));
-		MEM_interval = traverse (S, SA, query, curr_index, SA_interval, query.length());
+		SA_interval = traverse (curr_index, SA_interval, L - (K - 1), S, SA, query);
+		MEM_interval = traverse (curr_index, MEM_interval, query.length(), S, SA, query);
 
-		if (SA_interval.index <= 1) {
-			SA_interval = MEM_interval = {0, {0, N / K - 1}};
+		if (SA_interval.depth <= 1) {
+			SA_interval = MEM_interval = {0, 0, N / K - 1};
 			curr_index += K;
 			continue;
 		}
 
-		if (SA_interval.index >= (L - (K - 1)))
-			collect_MEMs(SA, LCP, curr_index, SA_interval, MEM_interval, S, query); //
+		if (SA_interval.depth >= (L - (K - 1)))
+			collect_MEMs(curr_index, SA_interval, MEM_interval, S, query, SA, LCP); //
 		curr_index += K;
 
-		SA_interval = suffix_link (ISA, SA, LCP, SA_interval);
-		MEM_interval = suffix_link (ISA, SA, LCP, MEM_interval);
+		SA_interval = suffix_link (SA_interval, ISA, SA, LCP);
+		MEM_interval = suffix_link (MEM_interval, ISA, SA, LCP);
 
-		if (SA_interval.index == TOO_LOW) {
-			SA_interval = MEM_interval = {0,  {0, N / K - 1}};
+		if (SA_interval.depth == TOO_LOW) {
+			SA_interval = MEM_interval = {0,  0, N / K - 1};
 			continue;
 		}
 	}

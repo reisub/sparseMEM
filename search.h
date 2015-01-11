@@ -9,41 +9,36 @@ using namespace std;
 // velicina ulaznog stringa
 #define K 1 
 // K je korak (za sparse-array)
-#define L 2
+#define L 3
 // minimalni broj slova koja se trebaju poklpati ("proširena pretraga")
 #define TOO_LOW -1
 
 struct interval_t {
+  long depth;
 	long start, end;
 };
 
-struct triplet_t {
-	long index;
-	struct interval_t interval;
-};
+long binary_search_left (char cmp_char, interval_t interval, string &S, long *SA);
 
+long binary_search_right (char cmp_char, interval_t interval, string &S, long *SA);
 
-long binary_search_left (string &S, long *SA, char cmp_char, triplet_t triplet);
-
-long binary_search_right (string &S, long *SA, char cmp_char, triplet_t triplet);
-
-triplet_t topdown_search (string &S, long *SA, char cmp_char, triplet_t triplet);
+interval_t topdown (char cmp_char, interval_t interval, string &S, long *SA);
 
 interval_t search_string(string &S, long *SA, string &query);
  
-triplet_t traverse(long p, triplet_t triplet, long M);
+interval_t traverse(long p, interval_t triplet, long M, string &S, long *SA, string &query);
 
 void findL (long p, long i, long q, string &S, string &P);
 
-void collect_MEMs (long *SA, long *LCP, long p, triplet_t SA_i, triplet_t MEM, string &S, string &P);
+void collect_MEMs (long p, interval_t SA_i, interval_t MEM, string &S, string &P, long *SA, long *LCP);
 
-void print_MEM (long query_index,long ref_string_index, long length, string &S);
+void print_MEM (long query_index, long ref_string_index, long length, string &S);
 
-void find_MEMs(string &S, long *ISA, long *LCP, long *SA, string &query, long query_index);
+void MEM(long p0, string &S, long *ISA, long *LCP, long *SA, string &query);
 
-triplet_t suffix_link (long *ISA, long *SA, long *LCP, triplet_t triplet);
+interval_t suffix_link (interval_t interval, long *ISA, long *SA, long *LCP);
 
-triplet_t expand_link (long *LCP, triplet_t triplet);
+interval_t expand_link (interval_t interval, long *LCP);
 
 
 

@@ -19,14 +19,14 @@ int main(){
 	assert ( 5 == MAX3(5,5,5));
 	cout << "Test passed. (MAX2 and MAX3 macros)";	
 	
-	assert(1 == binary_search_left(S, SA, c, {0, {0, 11}}));
-	assert(4 == binary_search_right(S, SA, c, { 0, {0, 11}}));
+	assert(1 == binary_search_left(c, {0, 0, 11}, S, SA));
+	assert(4 == binary_search_right(c, { 0, 0, 11}, S, SA));
 	cout << "Test passed. (binary search)" << endl;
 
-	triplet_t ret_val = topdown_search(S, SA, c, {0, {0, 11}});
-	assert (ret_val.index == 1);
-	assert (ret_val.interval.start == 1);
-	assert (ret_val.interval.end == 4);
+	interval_t ret_val = topdown(c, {0, 0, 11}, S, SA);
+	assert (ret_val.depth == 1);
+	assert (ret_val.start == 1);
+	assert (ret_val.end == 4);
 	cout << "Test passed. (topdown search)" << endl;
 
 	interval_t empty, interval;
@@ -37,43 +37,45 @@ int main(){
 	assert (empty.end == 0);
 	cout << "Test passed. (search_string, empty response)" << endl;
 
-	string str = "i";
-	interval = search_string(S, SA, str);
-	assert (interval.start == 1);
-	assert (interval.end == 4);
+	string str = "is";
+	interval_t aa = search_string(S, SA, str);
+	cout << aa.start << endl;
+	assert (aa.start == 3);
+	cout << aa.end << endl;
+	assert (aa.end == 4);
 	cout << "Test passed. (search_string, valid response)" << endl;
 
 	c = 's';
-	ret_val = topdown_search(S, SA, c, {2, {3, 4}});
-	assert (ret_val.index == 3);
-	assert (ret_val.interval.start == 3);
-	assert (ret_val.interval.end == 4);
+	ret_val = topdown(c, {1, 3, 4}, S, SA);
+	assert (ret_val.depth == 2);
+	assert (ret_val.start == 3);
+	assert (ret_val.end == 4);
 	cout << "Test passed. (topdown search)" << endl;
 	
-	// issIppi
+	// missIppi
 	c = 'i';
-	ret_val = topdown_search(S, SA, c, {3, {3, 4}});
-	assert (ret_val.index == 4);
-	assert (ret_val.interval.start == 3);
-	assert (ret_val.interval.end == 4);
+	ret_val = topdown(c, {3, 3, 4}, S, SA);
+	assert (ret_val.depth == 4);
+	assert (ret_val.start == 3);
+	assert (ret_val.end == 4);
 	cout << "Test passed. (topdown search)" << endl;
 
-	// issiPpi
+	// missiPpi
 	c = 'p';
-	ret_val = topdown_search(S, SA, c, {4, {3, 4}});
-	assert (ret_val.index == 5);
-	assert (ret_val.interval.start == 3);
-	assert (ret_val.interval.end == 3);
+	ret_val = topdown(c, {4, 3, 4}, S, SA);
+	assert (ret_val.depth == 5);
+	assert (ret_val.start == 3);
+	assert (ret_val.end == 3);
 	cout << "Test passed. (topdown search)" << endl;
 	
 
 
 	// issiPpi
 	string stringg("issippi$");
-	ret_val = traverse (S, SA, stringg , 0 , {0, {0, 11}}, 14);
-	assert (ret_val.index == 8);
-	assert (ret_val.interval.start == 3);
-	assert (ret_val.interval.end == 3);
+	ret_val = traverse (0 , {0, 0, 11}, 14, S, SA, stringg);
+	assert (ret_val.depth == 8);
+	assert (ret_val.start == 3);
+	assert (ret_val.end == 3);
 	cout << "Test passed. (topdown search)" << endl;
 
 
@@ -83,9 +85,9 @@ int main(){
 	string string_S = "mississippi$";
 	long sparse_ISA[] = {2, 5, 1, 4, 3, 0};
 	long sparse_LCP[] = {-1, 1, 0, 0, 0, 1};  
-	string query_string ("iss");
+	string query_string ("issip");
 	
-	find_MEMs(S, ISA, LCP, SA, query_string, 0);
+	MEM(0, S, ISA, LCP, SA, query_string);
 	
 	return 0;
 	
