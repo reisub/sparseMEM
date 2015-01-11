@@ -13,7 +13,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CFLAGS) $< -o $@
 
 test: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/simple.txt test_cases/query.txt 1 2
+	./$(EXECUTABLE) test_cases/simple.txt test_cases/query.txt 2 3
 	./$(EXECUTABLE) test_cases/afumig.fasta test_cases/query.fa 3 20
 
 clean:
