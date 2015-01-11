@@ -99,21 +99,47 @@ int main(int argc, char *argv[]) {
 	if (ref_string.substr(sa[i]) == 'G') G_++;	
   }
 
+  
+  sparseSA[0] = SA[0 * K];
+  
+  
   // Generate Sparse Suffix Array, A, C, T, G
-  for (int i = 0; i < N / K; ++i) {
-    sparseSA[i] = SA[i * K];
+  int j =0;
+  for (int i = 1; i < N; ++i) {
+  
+    if(A_>K){
+		sparseSA[j] = SA[i * K];
+		A_ = A_-K;
+	}
+	
+	else if (C_>K){
+		sparseSA[j] = SA[i * K + A_];
+		C_ = C_-K;
+	}
+	
+	else if (T_>K){
+		sparseSA[j] = SA[i * K + A_ + C_];
+		T_ = T_-K;
+	}
+	
+	else if (G_ >K){
+		sparseSA[j] = SA[i * K + A_ + C_ + T_];
+		G_ = G_ -K;
+	}
+	
+	else break;
+    
+	j++;
+	//sparseSA[i] = SA[i * K];
   }
+  
+  BROJ_ = j;
 
+  
+  
   // Generate ISA A
   for(int i = 0; i < N/K; i++) {
-	
-	if (A_>=3)
 		sparseISA[sparseSA[i]/K] = i;
-	
-	
-	
-	
-	BROJ ++;
   }
 
   // Generate LCP
