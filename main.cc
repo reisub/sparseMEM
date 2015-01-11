@@ -107,23 +107,23 @@ int main(int argc, char *argv[]) {
   int j =1;
   for (int i = 1; i < N; ++i) {
   
-    if(A_>=K){
+    if(A_>=0){
 		sparseSA[j] = SA[i * K  - (K-1)];
 		A_ = A_-K;
 cout << A_ << endl;
 	}
 	
-	else if (C_>=K){
-		sparseSA[j] = SA[i * K + A_  - (K-1)];
+	else if (C_>=0){
+		sparseSA[j] = SA[i * K + A_ - (K-1) ];
 		C_ = C_-K;
 	}
 	
-	else if (T_>=K){
+	else if (T_>=0){
 		sparseSA[j] = SA[i * K + A_ + C_  - (K-1)];
 		T_ = T_-K;
 	}
 	
-	else if (G_ >=K){
+	else if (G_ >=0){
 		sparseSA[j] = SA[i * K + A_ + C_ + T_  - (K-1)];
 		G_ = G_ -K;
 	}
