@@ -8,10 +8,10 @@ using namespace std;
 
 
 int main(){
-	long SA[] = {11, 10, 7, 4, 1, 0, 9, 8, 6, 3, 5, 2};
+	int SA[] = {11, 10, 7, 4, 1, 0, 9, 8, 6, 3, 5, 2};
 	string S = "mississippi$";
-	long LCP[] = {-1, 0, 1, 1, 4, 0, 0, 1, 0, 2, 1, 3};
-	long ISA[] = {5, 4, 11, 9, 3, 10, 8, 2, 7, 6, 1, 0};
+	int LCP[] = {-1, 0, 1, 1, 4, 0, 0, 1, 0, 2, 1, 3};
+	int ISA[] = {5, 4, 11, 9, 3, 10, 8, 2, 7, 6, 1, 0};
 	char c = 'i';
 	
 	assert ( 3 == MAX3(1,2,3));
@@ -81,13 +81,20 @@ int main(){
 
 	//////////////////////////
 	// array tests:
-	long sparse_SA[] = {10, 4, 0, 8, 6, 2};
-	string string_S = "mississippi$";
-	long sparse_ISA[] = {2, 5, 1, 4, 3, 0};
-	long sparse_LCP[] = {-1, 1, 0, 0, 0, 1};  
+	  
 	string query_string ("issip");
+	// K == 1 (step), N == size of S (11), L = min match to print (npr. 2) 
+	MEM(0, S, ISA, LCP, SA, query_string, 1, 11, 2);
 	
-	MEM(0, S, ISA, LCP, SA, query_string);
+	
+	
+	////// Sparse 
+	int sparse_SA[] = {10, 4, 0, 8, 6, 2};
+	string string_S = "mississippi$";
+	int sparse_ISA[] = {2, 5, 1, 4, 3, 0};
+	int sparse_LCP[] = {-1, 1, 0, 0, 0, 1};
+	
+	MEM(0, S, ISA, LCP, SA, query_string, 2, 11, 3);
 	
 	return 0;
 	

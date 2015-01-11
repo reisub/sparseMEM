@@ -60,12 +60,14 @@ int main(int argc, char *argv[]) {
   }
 
 	std::string ref_string;
- // std::getline(ref_file, ref_string);
- // std::cout << "String: " << ref_string << std::endl;
 	std::vector<string> refdescr;
 	std::vector<long> startpos;
 
 	fasta_parser(argv[1], ref_string, refdescr, startpos);
+	
+	std::int K = atoi(argv[3]);
+  std::int L = atoi(argv[4]);
+  std::int N = ref_string;
 
 	std::string query_string;
   std::getline(query_file, query_string);
@@ -83,17 +85,26 @@ int main(int argc, char *argv[]) {
     << ref_string.substr(sa[i]) << std::endl;
   }
 
-  int *SA = new int[ref_string.size()];
-
-  sa_is(ref_string.c_str(), SA, ref_string.size(), 256, sizeof(char));
-
-  for (unsigned int i = 0; i < ref_string.size(); ++i) {
+  int *SA = new int[N];
+  int *sparseSA = new int[N / K];
+  int *ISA = new int[N];
+  
+  // Creates Suffix Array using SA_IS algorithm
+  sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
+  
+  // Create 
+  // Creates Invese SA
+  for ( int i = 0; i < N; ++i) {;}
+  
+  for (int i = 0; i < N); ++i) {
     printf("%d ", SA[i]);
     if (SA[i] != sa[i]) {
       std::cout << "<-!!! ";
     }
   }
   printf("\n");
+  
+  
 
   return 0;
 }

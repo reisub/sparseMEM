@@ -9,16 +9,16 @@ using namespace std;
 * Searches input string (S) for suffixes having "cmp_char" at "q_offset",
 * using suffix array (SA).
 */
-long binary_search_left (char cmp_char, interval_t interval, string &S, long *SA) {
-	long depth = interval.depth;
-	long start = interval.start;
-	long end = interval.end;	
+int binary_search_left (char cmp_char, interval_t interval, string &S, int *SA) {
+	int depth = interval.depth;
+	int start = interval.start;
+	int end = interval.end;	
 	
 	if (cmp_char == S[SA[start] + depth]) {
 		return start;
 	}
 	
-	long middle;
+	int middle;
 	while ((end - start) > 1) {
 		middle = (end + start) / 2;	
 		if (cmp_char <= S[SA[middle] + depth]) {
@@ -36,16 +36,16 @@ long binary_search_left (char cmp_char, interval_t interval, string &S, long *SA
 * Searches input string (S) for suffixes having "cmp_char" at "q_offset",
 * using suffix array (SA).
 */
-long binary_search_right (char cmp_char, interval_t interval, string &S, long *SA) {
-	long depth = interval.depth;
-	long start = interval.start;
-	long end = interval.end;	
+int binary_search_right (char cmp_char, interval_t interval, string &S, int *SA) {
+	int depth = interval.depth;
+	int start = interval.start;
+	int end = interval.end;	
 
 	if (cmp_char == S[SA[end] + depth]){
 		return end;
 	}
 	
-	long middle;
+	int middle;
 	while ((end - start) > 1) {
 		middle = (end + start) / 2;	
 		if (cmp_char < S[SA[middle] + depth]) {
@@ -63,11 +63,11 @@ long binary_search_right (char cmp_char, interval_t interval, string &S, long *S
 * It uses binary_search to find both boundaries (in suffix array).
 */
 
-interval_t topdown(char cmp_char, interval_t interval, string &S, long *SA) {
-	long offset = interval.depth;
-	long start = interval.start;
-	long end = interval.end;	
-	long lower_bound, upper_bound;
+interval_t topdown(char cmp_char, interval_t interval, string &S, int *SA) {
+	int offset = interval.depth;
+	int start = interval.start;
+	int end = interval.end;	
+	int lower_bound, upper_bound;
 
 	if (cmp_char < S[SA[start] + offset]){
 		return {-1, 0, 0};
@@ -87,10 +87,10 @@ interval_t topdown(char cmp_char, interval_t interval, string &S, long *SA) {
 }
 
 
-interval_t suffix_link (interval_t interval, long *ISA, long *SA, long *LCP) {
-	long offset = interval.depth;
-	long start = interval.start;
-	long end = interval.end;
+interval_t suffix_link (interval_t interval, int *ISA, int *SA, int *LCP, int K, int N) {
+	int offset = interval.depth;
+	int start = interval.start;
+	int end = interval.end;
 	
 	offset = offset -  K;
 	if (offset <= 0) return {-1, 0, 0};
@@ -98,18 +98,18 @@ interval_t suffix_link (interval_t interval, long *ISA, long *SA, long *LCP) {
 	start = ISA[SA[start] / K + 1];
 	end = ISA[SA[end] / K + 1];
 
-	return expand_link({offset, start, end}, LCP); 
+	return expand_link({offset, start, end}, LCP, K, N); 
 }
 
-interval_t expand_link (interval_t interval, long *LCP) {
-	long offset = interval.depth;
-	long start = interval.start;
-	long end = interval.end;	
+interval_t expand_link (interval_t interval, int *LCP, int K, int N) {
+	int offset = interval.depth;
+	int start = interval.start;
+	int end = interval.end;	
 	
 	if (offset == 0) return {0, 0, N - 1};
 
-	long T = 2 * offset * (long)ceil(log(N/K) / log(2.0));
-	long e = 0;
+	int T = 2 * offset * (long)ceil(log(N/K) / log(2.0));
+	int e = 0;
 
 	while (start >= 0 and LCP[start] >= offset) {		
 		e += 1;
@@ -130,16 +130,16 @@ interval_t expand_link (interval_t interval, long *LCP) {
 
 
 
-interval_t search_string (string &S, long *SA, string &query_string) {
-	long query_index = 0;
-	long start = 0;
-	long end = 11; 
+interval_t search_string (string &S, int *SA, string &query_string) {
+	int query_index = 0;
+	int start = 0;
+	int end = 11; 
 	interval_t triplet;
 		
 	while (query_index < query_string.length()) {
 		triplet = topdown (query_string[query_index], {query_index, start, end}, S, SA);
  
-		if (triplet.depth == TOO_LOW) {
+		if (triplet.depth == -1) {
 			return {0, 0};		
 		}
 		
@@ -152,14 +152,14 @@ interval_t search_string (string &S, long *SA, string &query_string) {
 }
 
 
-interval_t traverse(long query_index, interval_t interval, long size, string &S, long *SA, string &query) {
+interval_t traverse(int query_index, interval_t interval, int size, string &S, int *SA, string &query) {
 	interval_t triplet_tmp;
 	interval_t not_found = {-1, 0, 0};
  
 	while (query_index + interval.depth < query.length()) {
 		triplet_tmp = topdown (query [query_index + interval.depth],	interval, S, SA);
 
-		if (triplet_tmp.depth == TOO_LOW)
+		if (triplet_tmp.depth == -1 )
 			return interval;	
 
 		interval = triplet_tmp;
@@ -170,9 +170,9 @@ interval_t traverse(long query_index, interval_t interval, long size, string &S,
 	return interval;
 }
 
-void print_MEM (long query_index, long ref_string_index, long length, string &S){
+void print_MEM (int query_index, int ref_string_index, int length, string &S){
   cout << '>';
-  for (long i = query_index; i <= length; i += 1) {
+  for (int i = query_index; i <= length; i += 1) {
     cout << S[i + 1];
   }
     
@@ -180,8 +180,8 @@ void print_MEM (long query_index, long ref_string_index, long length, string &S)
   
 } 
 
-void findL (long query_index, long ref_string_index, long length, string &S, string &query) { // K is step, K-SA
-	for (long k = 0; k <= K - 1 ; k += 1){
+void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L) { // K is step, K-SA
+	for (int k = 0; k <= K - 1 ; k += 1){
 		if (query_index == 0 or ref_string_index == 0){
 		  print_MEM (query_index, ref_string_index, length, S);
 			return ;	
@@ -200,16 +200,16 @@ void findL (long query_index, long ref_string_index, long length, string &S, str
 
 
 
-void collect_MEMs (long curr_index, interval_t SA_i, interval_t MEM_i, string &S, string &query, long *SA, long *LCP) {
-	long SA_start = SA_i.start;
-	long SA_end = SA_i.end;
-	long SA_index = SA_i.depth;
-	long MEM_start = MEM_i.start;
-	long MEM_end = MEM_i.end;
-	long MEM_index = MEM_i.depth;
+void collect_MEMs (int curr_index, interval_t SA_i, interval_t MEM_i, string &S, string &query, int *SA, int *LCP, int K, int N, int L) {
+	int SA_start = SA_i.start;
+	int SA_end = SA_i.end;
+	int SA_index = SA_i.depth;
+	int MEM_start = MEM_i.start;
+	int MEM_end = MEM_i.end;
+	int MEM_index = MEM_i.depth;
 	
-	for (long i = MEM_start; i <= MEM_end; i += 1)
-		findL (curr_index, SA[i], MEM_index, S, query);
+	for (int i = MEM_start; i <= MEM_end; i += 1)
+		findL (curr_index, SA[i], MEM_index, S, query, K, L);
 
 	while (MEM_index >= SA_index) { 
 		if (MEM_end + 1 < N/K) {
@@ -221,11 +221,11 @@ void collect_MEMs (long curr_index, interval_t SA_i, interval_t MEM_i, string &S
 		if (MEM_index >= SA_index) {
 			while (LCP[MEM_start] >= MEM_index) {
 				MEM_start -= 1;
-				findL (curr_index, SA[MEM_start], MEM_index, S, query);
+				findL (curr_index, SA[MEM_start], MEM_index, S, query, K, L);
 			}
 			while ((MEM_end + 1) < N/K and LCP[MEM_end + 1] >= MEM_index) {
 				MEM_end += 1;
-				findL (curr_index, SA[MEM_end], MEM_index, S, query);
+				findL (curr_index, SA[MEM_end], MEM_index, S, query, K, L);
 			}
 		}
   }
@@ -236,11 +236,13 @@ void collect_MEMs (long curr_index, interval_t SA_i, interval_t MEM_i, string &S
 *
 *
 */
-void MEM(long query_index, string &S, long *ISA, long *LCP, long *SA, string &query) {
+void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query, int K, int N, int L) {
 	interval_t SA_interval = {0, 0, N / K - 1};
 	interval_t MEM_interval = {0, 0, N / K - 1};
-	long curr_index = query_index;
+	int curr_index = query_index;
 
+  if (L < K) return;
+  
 	while (curr_index < (query.length() - (K - query_index))) {
 		SA_interval = traverse (curr_index, SA_interval, L - (K - 1), S, SA, query);
 		MEM_interval = traverse (curr_index, MEM_interval, query.length(), S, SA, query);
@@ -252,13 +254,13 @@ void MEM(long query_index, string &S, long *ISA, long *LCP, long *SA, string &qu
 		}
 
 		if (SA_interval.depth >= (L - (K - 1)))
-			collect_MEMs(curr_index, SA_interval, MEM_interval, S, query, SA, LCP); //
+			collect_MEMs(curr_index, SA_interval, MEM_interval, S, query, SA, LCP, K, N, L); //
 		curr_index += K;
 
-		SA_interval = suffix_link (SA_interval, ISA, SA, LCP);
-		MEM_interval = suffix_link (MEM_interval, ISA, SA, LCP);
+		SA_interval = suffix_link (SA_interval, ISA, SA, LCP, K, N);
+		MEM_interval = suffix_link (MEM_interval, ISA, SA, LCP, K, N);
 
-		if (SA_interval.depth == TOO_LOW) {
+		if (SA_interval.depth == -1) {
 			SA_interval = MEM_interval = {0,  0, N / K - 1};
 			continue;
 		}
