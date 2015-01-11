@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
   }
 
   // Generate ISA
-  for(long i = 0; i < N/K; i++) {
+  for(int i = 0; i < N/K; i++) {
     sparseISA[sparseSA[i]/K] = i;
   }
 
