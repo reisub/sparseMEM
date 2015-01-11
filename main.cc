@@ -135,7 +135,9 @@ int main(int argc, char *argv[]) {
   
   BROJ = j;
 
-  
+    for(int i = 0; i < j; i++) {
+		cout << sparseSA[i];
+  }
   
   // Generate ISA A
   for(int i = 0; i < j; i++) {
