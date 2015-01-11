@@ -82,16 +82,16 @@ int main(int argc, char *argv[]) {
 
   suffix_array(ref_string, sa);
   type_array(ref_string.c_str(), types, N, sizeof(char));
-  
+  /*
   for (unsigned int i = 0; i < sa.size() - 1; ++i) {
     std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t")
     << ref_string.substr(sa[i]) << std::endl;
   }
-
+  */
   int *SA = new int[N];
-  int *sparseSA = new int[N / K];
-  int *ISA = new int[N / K];
-  int *LCP = new int[N / K];
+  int *sparseSA = new int[N / K + 1];
+  int *sparseISA = new int[N / K + 1];
+  int *sparseLCP = new int[N / K + 1];
 
   // Creates Suffix Array using SA_IS algorithm
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
@@ -104,44 +104,44 @@ int main(int argc, char *argv[]) {
 
   // Generate ISA
   for(long i = 0; i < N/K; i++) {
-    ISA[SA[i]/K] = i;
+    sparseISA[sparseSA[i]/K] = i;
   }
 
   // Generate LCP
   int h = 0;
-  for(int i = 0; i < N ; i+=K) {
-    int m = ISA[i/K];
+  for(int i = 0; i < N/K ; i+=K) {
+    int m = sparseISA[i];
     if(m==0) {
-      LCP[m] = 0;
+      sparseLCP[m] = 0;
     }
     else {
-      int j = SA[m-1];
+      int j = sparseSA[m-1];
       while(i+h < N && j+h < N && ref_string[i+h] == ref_string[j+h]) {
         h++;
       }
-      LCP[m] = h;
+      sparseLCP[m] = h;
     }
     h = std::max(0, h - K);
   }
 
-  printf("\nSA: ");
-  for (int i = 0; i < N; ++i)
-    printf("%d ", SA[i]);
+  printf("\nSparse SA: ");
+  for (int i = 0; i < N/K; ++i)
+    printf("%d ", sparseSA[i]);
     
-  printf("\nISA: ");
-  for (int i = 0; i < N; ++i)
-    printf("%d ", ISA[i]);
+  printf("\nSparse ISA: ");
+  for (int i = 0; i < N/K; ++i)
+    printf("%d ", sparseISA[i]);
     
-  printf("\nLCP: ");
-  for (int i = 0; i < N; ++i)
-    printf("%d ", LCP[i]);
+  printf("\nSparse LCP: ");
+  for (int i = 0; i < N/K; ++i)
+    printf("%d ", sparseLCP[i]);
   printf("\n");
 
 
   // Search for MEMs:
   printf("\tRef.\tQuery\tLength\n");
   int p0 = 0;
-  MEM(p0, ref_string, ISA, LCP, SA, query_string, K, N, L);
+  MEM(p0, ref_string, sparseISA, sparseLCP, sparseSA, query_string, K, N, L);
   
   return 0;
 }
