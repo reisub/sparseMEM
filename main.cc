@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 
   int *SA = new int[N];
   int *sparseSA = new int[N / K];
-  int *ISA = new int[N];
+  int *ISA = new int[N)];
   
   // Creates Suffix Array using SA_IS algorithm
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
   // Creates Invese SA
   for ( int i = 0; i < N; ++i) {;}
   
-  for (int i = 0; i < N); ++i) {
+  for ( int i = 0; i < N); ++i) {
     printf("%d ", SA[i]);
     if (SA[i] != sa[i]) {
       std::cout << "<-!!! ";
