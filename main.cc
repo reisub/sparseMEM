@@ -104,26 +104,26 @@ int main(int argc, char *argv[]) {
   
   
   // Generate Sparse Suffix Array, A, C, T, G
-  int j =0;
+  int j =1;
   for (int i = 1; i < N; ++i) {
   
-    if(A_>K){
-		sparseSA[j] = SA[i * K];
+    if(A_>=K){
+		sparseSA[j] = SA[i * K] - (K-1);
 		A_ = A_-K;
 	}
 	
-	else if (C_>K){
-		sparseSA[j] = SA[i * K + A_];
+	else if (C_>=K){
+		sparseSA[j] = SA[i * K + A_] - (K-1);
 		C_ = C_-K;
 	}
 	
-	else if (T_>K){
-		sparseSA[j] = SA[i * K + A_ + C_];
+	else if (T_>=K){
+		sparseSA[j] = SA[i * K + A_ + C_] - (K-1);
 		T_ = T_-K;
 	}
 	
-	else if (G_ >K){
-		sparseSA[j] = SA[i * K + A_ + C_ + T_];
+	else if (G_ >=K){
+		sparseSA[j] = SA[i * K + A_ + C_ + T_] - (K-1);
 		G_ = G_ -K;
 	}
 	
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
   
   // Generate ISA A
   for(int i = 0; i < j; i++) {
-		sparseISA[sparseSA[i]/K] = i;
+		sparseISA[sparseSA[i]] = i;
   }
 
   // Generate LCP
