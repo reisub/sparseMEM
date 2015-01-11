@@ -69,7 +69,7 @@ int main(){
 
 
 	// issiPpi
-	string stringg("issippi$i");
+	string stringg("issippi$");
 	ret_val = traverse (S, SA, stringg , 0 , {0, {0, 11}}, 14);
 	assert (ret_val.index == 8);
 	assert (ret_val.interval.start == 3);
@@ -78,16 +78,17 @@ int main(){
 
 
 	//////////////////////////
-	// Sparse array tests:
+	// array tests:
 	long sparse_SA[] = {10, 4, 0, 8, 6, 2};
-	string string_S ("mississippi$");
+	string string_S = "mississippi$";
 	long sparse_ISA[] = {2, 5, 1, 4, 3, 0};
 	long sparse_LCP[] = {-1, 1, 0, 0, 0, 1};  
 	string query_string ("iss");
 	
+	find_MEMs(S, ISA, LCP, SA, query_string, 0);
 	
-
 	return 0;
+	
 }
 
 
