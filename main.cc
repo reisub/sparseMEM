@@ -59,19 +59,19 @@ int main(int argc, char *argv[]) {
   // Read in reference string (fasta format)
 	std::string ref_string;
 	std::vector<string> refdescr;
-	std::vector<long> startpos;
+	std::vector<int> startpos;
 	fasta_parser(argv[1], ref_string, refdescr, startpos);
 
   // Read in query string (fasta format)
 	std::string query_string;
 	std::vector<string> querydescr;
-	std::vector<long> q_startpos;
+	std::vector<int> q_startpos;
   fasta_parser(argv[2], query_string, querydescr, q_startpos);
 
   int K = atoi(argv[3]);
   int L = atoi(argv[4]);
   int N = ref_string.length();
-  
+
   std::vector<int> sa;
   sa.reserve(N);
   bool *types = new bool[N];
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
     std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t")
     << ref_string.substr(sa[i]) << std::endl;
   }
-  
+
   int *SA = new int[N];
   int *sparseSA = new int[N / K];
   int *sparseISA = new int[N / K];
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
   // Creates Suffix Array using SA_IS algorithm
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
 
-  
+
   // Generate Sparse Suffix Array
   for (int i = 0; i < N / K; ++i) {
     sparseSA[i] = SA[i * K];
@@ -123,11 +123,11 @@ int main(int argc, char *argv[]) {
   printf("\nSparse SA: ");
   for (int i = 0; i < N/K; ++i)
     printf("%d ", sparseSA[i]);
-    
+
   printf("\nSparse ISA: ");
   for (int i = 0; i < N/K; ++i)
     printf("%d ", sparseISA[i]);
-    
+
   printf("\nSparse LCP: ");
   for (int i = 0; i < N/K; ++i)
     printf("%d ", sparseLCP[i]);
@@ -138,7 +138,7 @@ int main(int argc, char *argv[]) {
   printf("\tRef.\tQuery\tLength\n");
   int p0 = 0;
   MEM(p0, ref_string, sparseISA, sparseLCP, sparseSA, query_string, K, N, L);
-  
+
   return 0;
 }
 
