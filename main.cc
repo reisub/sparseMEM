@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
   }
 cout << endl;
   for(int i = 0; i < j; i++) {
-    cout << sparseISA[sparseSA[i]] << " ";
+    cout << sparseISA[sparseSA[i] % (j-1)] << " ";
   }
 
   // Generate LCP
