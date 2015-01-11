@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
   cout << endl;
   // Generate ISA A
   for(int i = 0; i < j; i++) {
-		sparseISA[sparseSA[i] % j] = i;
+		sparseISA[sparseSA[i] % (j-1)] = i;
   }
 cout << endl;
   for(int i = 0; i < j; i++) {
