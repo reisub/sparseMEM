@@ -13,10 +13,6 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CFLAGS) $< -o $@
 
 test: $(EXECUTABLE)
-<<<<<<< HEAD
-	./$(EXECUTABLE) test_cases/simple.txt test_cases/query.txt 2 3
-=======
->>>>>>> 758b2c2fbf5a56e3e942d2c3c524ea7d767a1d78
 	./$(EXECUTABLE) test_cases/afumig.fasta test_cases/query.fa 3 20
 
 clean:
