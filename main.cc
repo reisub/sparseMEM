@@ -92,49 +92,31 @@ cout << endl;
   int *sparseLCP = new int[N / K];
   short int A_, C_, T_, G_, BROJ;
   A_ = C_ = T_ = G_ = BROJ = 0;
+  
   // Creates Suffix Array using SA_IS algorithm
-
-
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
 
   int j = 0;
   for (int i = 0; i < N; i++){
-	//SA[i]-1 % K neznam kako uzimamo nulznak
-	if (SA[i] % K == 0){
-		sparseSA[j] = (int) SA[i];
-		cout << j << " " <<SA[i] << " " <<sparseSA[j] << endl; 
-		j++;
-	}
+	  //SA[i]-1 % K neznam kako uzimamo nulznak
+	  if (SA[i] % K == 0){
+		  sparseSA[j++] = (int) SA[i];
+	  }
 
   }
-
 
   for (unsigned int i = 0; i < j; ++i) {
     std::cout << "[" << i << "]\t" << sparseSA[i] << (types[sparseSA[i]] ? "\tS\t" : "\tL\t")
     << ref_string.substr(sparseSA[i]) << std::endl;
   }
 
-
   BROJ = j;
-
   cout << endl;
 
   // Generate ISA A
   for(int i = 0; i < N/K + 1  ; i++) {
-	sparseISA[i] = sparseSA[i] / K;
-cout << sparseSA[i]<< " ";
-cout << sparseSA[i] / K << " ";
-cout << sparseISA[sparseSA[i] / K] << endl;
+	  sparseISA[i] = sparseSA[i] / K;
   }
-
-  for(int i = 0; i < N/K -1 ; i++) {
-
-cout << sparseISA[i] << " " << ref_string.substr(sparseISA[i] * K) << endl;
-  }
-
-
-cout << endl;
-cout<< "TTTTTTEEESSTTTT"<<endl;
 
   // Generate LCP
   int h = 0;
