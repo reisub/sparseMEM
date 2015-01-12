@@ -68,6 +68,7 @@ int main(int argc, char *argv[]) {
   // Creates Suffix Array using SA_IS algorithm
 
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
+  ref_string.append(pad_length - 1, TERMINATION_CHAR);
 
   int j = 0;
   if(ref_string.size() % K != 0){
