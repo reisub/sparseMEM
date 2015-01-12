@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
       sparseSA[i] = sparseSA[i - (pad_length - 1)];
     }
     for (int i = 0; i <= pad_length - 1; i += K) {
-      sparseSA[i] = N - i;
+      sparseSA[i] = N - i - 1;
     }
   }
 
