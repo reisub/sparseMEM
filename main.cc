@@ -73,14 +73,15 @@ int main(int argc, char *argv[]) {
   }
 
   if(pad_length % K != 0) {
-    ref_string.append(pad_length - 1, TERMINATION_CHAR);
+    std::cout << "pad_length: " << pad_length << std::endl;
+    ref_string.append(pad_length, TERMINATION_CHAR);
     N = ref_string.size();
     j += pad_length - 1;
 
-    for (int i = N-1; i >= pad_length - 1; --i) {
-      sparseSA[i] = sparseSA[i - (pad_length - 1)];
+    for (int i = N - 1; i >= pad_length - 1; --i) {
+      sparseSA[i] = sparseSA[i - (pad_length) + 1];
     }
-    for (int i = 0; i <= pad_length - 1; i += K) {
+    for (int i = 0; i <= pad_length; i += K) {
       sparseSA[i] = N - i - 1;
     }
   }
