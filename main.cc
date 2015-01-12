@@ -5,6 +5,8 @@
 #include <vector>
 #include <algorithm>
 
+#include <cmath>
+
 #include "fasta_parser.h"
 #include "sa_is.h"
 #include "search.h"
@@ -83,8 +85,7 @@ int main(int argc, char *argv[]) {
     std::cout << "[" << i << "]\t" << sa[i] << (types[sa[i]] ? "\tS\t" : "\tL\t")
     << ref_string.substr(sa[i]) << std::endl;
   }
-
-cout << endl;
+  cout << endl;
 
   int *SA = new int[N];
   int *sparseSA = new int[N / K];
@@ -135,36 +136,21 @@ cout << endl;
     h = std::max(0, h - K);
   }
 
-<<<<<<< HEAD
-  printf("\nSparse SA: ");
+  cout << endl << "Sparse SA: ";
   for (int i = 0; i < ceil(N/K); ++i)
     cout << sparseSA[i] << "  ";
 
-  printf("\nSparse ISA: ");
+  cout << endl << "Sparse ISA: ";
   for (int i = 0; i < ceil(N/K) ; ++i)
     cout << sparseISA[i] << "  ";
 
-  printf("\nSparse LCP: ");
+  cout << endl << "Sparse LCP: ";
   for (int i = 0; i < ceil(N/K); ++i)
     cout << sparseLCP[i] << "  ";
-=======
-  cout << "\nSparse SA: " ;
-  for (int i = 0; i < N/K; ++i)
-    cout << sparseSA[i] << " ";
-
-  cout << "\nSparse ISA: ";
-  for (int i = 0; i < N/K; ++i)
-    cout << sparseISA[i] << " ";
-
-  cout << "\nSparse LCP: ";
-  for (int i = 0; i < N/K; ++i)
-    cout << sparseLCP[i] << " ";
-  cout << endl;
->>>>>>> e34561efe0a549fefb68b58a396cb7e5ad172d9d
 
 
   // Search for MEMs:
-  printf("\tRef.\tQuery\tLength\n");
+  cout << endl << "\tRef.\tQuery\tLength" << endl;
 
   int p0 = 0;
   MEM(p0, ref_string, sparseISA, sparseLCP, sparseSA, query_string, K, N, L);
