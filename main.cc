@@ -55,10 +55,6 @@ int main(int argc, char *argv[]) {
 
   std::cout << ref_string << std::endl;
 
-  std::vector<int> sa;
-  sa.reserve(N);
-  bool *types = new bool[N];
-
   int *SA = new int[N];
 
   int *sparseSA = new int[N / K + K];
@@ -85,12 +81,12 @@ int main(int argc, char *argv[]) {
       sparseSA[i] = sparseSA[i - (pad_length - 1)];
     }
     for (int i = 0; i <= pad_length - 1; i += K) {
-      sparseSA[i] = N - i;
+      sparseSA[i] = N - i - 1;
     }
   }
 
   for (unsigned int i = 0; i < j; ++i) {
-    std::cout << "[" << i << "]\t" << sparseSA[i] << (types[sparseSA[i]] ? "\tS\t" : "\tL\t")
+    std::cout << "[" << i << "]\t" << sparseSA[i] << "\t"
     << ref_string.substr(sparseSA[i]) << std::endl;
   }
 
