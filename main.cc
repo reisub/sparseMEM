@@ -80,6 +80,8 @@ int main(int argc, char *argv[]) {
 
   int N = ref_string.length();
 
+  std::cout << ref_string << std::endl;
+
   std::vector<int> sa;
   sa.reserve(N);
   bool *types = new bool[N];
@@ -100,8 +102,8 @@ int main(int argc, char *argv[]) {
   short int A_, C_, T_, G_, BROJ;
   A_ = C_ = T_ = G_ = BROJ = 0;
 
-
   // Creates Suffix Array using SA_IS algorithm
+
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
 
   int j = 0;

@@ -160,7 +160,6 @@ int sa_is(const char *s, int *SA, int n, int alphabet_size, int cs) {
       }
   std::cout << std::endl;
 
-
     if (diff) {
       name++;
       prev = pos;

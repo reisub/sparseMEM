@@ -13,7 +13,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CFLAGS) $< -o $@
 
 test: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/afumig.fasta test_cases/query.fa 5 15
+	./$(EXECUTABLE) test_cases/afumig.fasta test_cases/query.fa 1 15
 
 clean:
 	-rm $(OBJECTS) $(EXECUTABLE)

@@ -5,9 +5,6 @@
 
 #include "fasta_parser.h"
 
-
-
-
 // Concatenate new sequences to set, keep track of lengths.
 // NOTE: Concatenation using the '`' character to separate strings!
 void fasta_parser(string filename, string &output_string, vector<string> &meta_data, vector<long> &startpos) {
@@ -18,10 +15,9 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 
 	ifstream data(filename.c_str());
 
-    if(!data.is_open()) { cerr << "unable to open " << filename << endl; exit(1); } 
+	if(!data.is_open()) { cerr << "unable to open " << filename << endl; exit(1); }
 
 	else cout << "all fine so far..." <<endl;
-
 
 	while(!data.eof()) {
 		getline(data, line); // Load one line at a time.
@@ -32,8 +28,9 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 		// Meta tag line and start of a new sequence.
 		if(line[0] == '>') {
 
-			
-			for(long i = start; i <= end; i++) { if(line[i] == ' ') break; meta += line[i]; }
+
+			for(long i = start; i <= end; i++) { if(line[i] == ' ') break; meta += line[i];
+			}
 
 			meta_data.push_back(meta);
 
@@ -42,19 +39,18 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 			cout << output_string.length() <<endl;
 
 		  // Reset parser state.
-		  start = 0; meta = ""; length = 0;
+			start = 0; meta = ""; length = 0;
 		}
 
-	
+
 		else { // Collect sequence data.
-		 
-		for(long i = 0; i <= end; i++) { 
-			output_string += (line[i]);
+
+			for(long i = 0; i <= end; i++) {
+				output_string += (line[i]);
 			}
 		}
 	}
 
-	output_string.erase(output_string.begin());
 	startpos.erase(startpos.begin());
 
 	cerr << "# output_string.length=" << output_string.length() << endl;
