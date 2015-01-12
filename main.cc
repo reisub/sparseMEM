@@ -76,8 +76,6 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  std::cout << "pad length: " << pad_length << std::endl;
-
   if(pad_length % K != 0) {
     ref_string.append(pad_length - 1, TERMINATION_CHAR);
     N = ref_string.size();
