@@ -147,7 +147,7 @@ interval_t traverse(int query_index, interval_t interval, int size, string &S, i
 }
 
 void print_MEM (int query_index, int ref_string_index, int length){
-  cout << "\t" << query_index << "\t" << ref_string_index << "\t" << length << endl; 
+  cout << "\t" << ref_string_index  << "\t" << query_index << "\t" << length << endl; 
 } 
 
 void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L) { // K is step, K-SA
