@@ -124,7 +124,7 @@ int main(int argc, char *argv[]) {
   cout << endl;
 
   // Generate ISA A
-  for(int i = 0; i < N/K + 1  ; i++) {
+  for(int i = 0; i < N/K  ; i++) {
 	  sparseISA[i] = sparseSA[i] / K;
   }
 
