@@ -69,11 +69,11 @@ int main(int argc, char *argv[]) {
 
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
   ref_string.append(pad_length - 1, TERMINATION_CHAR);
-  N = ref_string.size();
+ // N = ref_string.size();
 
   int j = 0;
-  if(ref_string.size() % K != 0) {
-    sparseSA[j++] = (int) SA[0];
+  if((ref_string.size()+1) % K != 0) {
+    j++;
 	}
 
   for (int i = 0; i < N; i++) {
@@ -81,6 +81,8 @@ int main(int argc, char *argv[]) {
       sparseSA[j++] = (int) SA[i];
     }
   }
+
+  if((ref_string.size()+1) % K != 0) {sparseSA[0] = j*K + K;}
 
   for (unsigned int i = 0; i < j; ++i) {
     std::cout << "[" << i << "]\t" << sparseSA[i] << (types[sparseSA[i]] ? "\tS\t" : "\tL\t")
