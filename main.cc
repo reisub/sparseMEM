@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
 
   // pad string with $
   int pad_length = K - (ref_string.size() % K);
-  ref_string.append(pad_length, TERMINATION_CHAR);
+  ref_string.append(1, TERMINATION_CHAR);
 
   int N = ref_string.length();
 
@@ -63,20 +63,14 @@ int main(int argc, char *argv[]) {
   int *sparseSA = new int[N / K];
   int *sparseISA = new int[N / K];
   int *sparseLCP = new int[N / K];
-  short int A_, C_, T_, G_, BROJ;
-  A_ = C_ = T_ = G_ = BROJ = 0;
 
   // Creates Suffix Array using SA_IS algorithm
 
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
 
   int j = 0;
-  for (int i = 0; i < N; i++){
-	  //SA[i]-1 % K neznam kako uzimamo nulznak
-	  if (SA[i] % K == 0){
-		  sparseSA[j++] = (int) SA[i];
-	  }
-
+  for (int i = 0; i < N / K; i++){
+	  sparseSA[i] = SA[i * K];
   }
 
   for (unsigned int i = 0; i < j; ++i) {
@@ -84,7 +78,6 @@ int main(int argc, char *argv[]) {
     << ref_string.substr(sparseSA[i]) << std::endl;
   }
 
-  BROJ = j;
   cout << endl;
 
   // Generate ISA A
