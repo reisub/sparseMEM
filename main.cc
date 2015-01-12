@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  if((ref_string.size()+1) % K != 0) {sparseSA[0] = j*K + K;}
+  if((ref_string.size()+1) % K != 0) {sparseSA[0] = (j-1)*K;}
 
   for (unsigned int i = 0; i < j; ++i) {
     std::cout << "[" << i << "]\t" << sparseSA[i] << (types[sparseSA[i]] ? "\tS\t" : "\tL\t")
