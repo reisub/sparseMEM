@@ -105,17 +105,16 @@ int main(int argc, char *argv[]) {
   }
 
   cout << endl << "Sparse SA: ";
-  for (int i = 0; i < ceil(j); ++i)
+  for (int i = 0; i < j; ++i)
     cout << sparseSA[i] << "  ";
 
   cout << endl << "Sparse ISA: ";
-  for (int i = 0; i < ceil(j) ; ++i)
+  for (int i = 0; i < j; ++i)
     cout << sparseISA[i] << "  ";
 
   cout << endl << "Sparse LCP: ";
-  for (int i = 0; i < ceil(j); ++i)
+  for (int i = 0; i < j; ++i)
     cout << sparseLCP[i] << "  ";
-
 
   // Search for MEMs:
   cout << endl << "\tRef.\tQuery\tLength" << endl;
