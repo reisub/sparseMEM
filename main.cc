@@ -135,22 +135,23 @@ cout << endl;
     h = std::max(0, h - K);
   }
 
-  printf("\nSparse SA: ");
+  cout << "\nSparse SA: " ;
   for (int i = 0; i < N/K; ++i)
-    printf("%d ", sparseSA[i]);
+    cout << sparseSA[i] << " ";
 
-  printf("\nSparse ISA: ");
+  cout << "\nSparse ISA: ";
   for (int i = 0; i < N/K; ++i)
-    printf("%d ", sparseISA[i]);
+    cout << sparseISA[i] << " ";
 
-  printf("\nSparse LCP: ");
+  cout << "\nSparse LCP: ";
   for (int i = 0; i < N/K; ++i)
-    printf("%d ", sparseLCP[i]);
-  printf("\n");
+    cout << sparseLCP[i] << " ";
+  cout << endl;
 
 
   // Search for MEMs:
   printf("\tRef.\tQuery\tLength\n");
+
   int p0 = 0;
   MEM(p0, ref_string, sparseISA, sparseLCP, sparseSA, query_string, K, N, L);
 
