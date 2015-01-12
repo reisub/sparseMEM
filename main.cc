@@ -136,17 +136,16 @@ cout << endl;
   }
 
   printf("\nSparse SA: ");
-  for (int i = 0; i < N/K; ++i)
-    printf("%d ", sparseSA[i]);
+  for (int i = 0; i < ceil(N/K); ++i)
+    cout << sparseSA[i] << "  ";
 
   printf("\nSparse ISA: ");
-  for (int i = 0; i < N/K; ++i)
-    printf("%d ", sparseISA[i]);
+  for (int i = 0; i < ceil(N/K) ; ++i)
+    cout << sparseISA[i] << "  ";
 
   printf("\nSparse LCP: ");
-  for (int i = 0; i < N/K; ++i)
-    printf("%d ", sparseLCP[i]);
-  printf("\n");
+  for (int i = 0; i < ceil(N/K); ++i)
+    cout << sparseLCP[i] << "  ";
 
 
   // Search for MEMs:
