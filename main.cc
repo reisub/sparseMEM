@@ -60,13 +60,21 @@ int main(int argc, char *argv[]) {
   bool *types = new bool[N];
 
   int *SA = new int[N];
-  int *sparseSA = new int[N/K + K];
-  int *sparseISA = new int[N/K + K];
-  int *sparseLCP = new int[N/K + K];
+
+  int *sparseSA = new int[N / K + K];
+  int *sparseISA = new int[N / K + K];
+  int *sparseLCP = new int[N / K + K];
+  int prosirivanje=0;
 
   // Creates Suffix Array using SA_IS algorithm
 
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
+
+
+  if(ref_string.size() % K != 0){
+	prosirivanje=1;
+	}
+
 
   int j = 0;
   for (int i = 0; i < N; i++){
@@ -74,6 +82,7 @@ int main(int argc, char *argv[]) {
       sparseSA[j++] = (int) SA[i];
     }
   }
+  if (prosirivanje) sparseSA[j++] = (int) SA[ref_string.size()-1];
 
   for (unsigned int i = 0; i < j; ++i) {
     std::cout << "[" << i << "]\t" << sparseSA[i] << (types[sparseSA[i]] ? "\tS\t" : "\tL\t")
