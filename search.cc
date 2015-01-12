@@ -1,6 +1,6 @@
 #include <cmath>
 #include "search.h"
-
+#include <iostream>
 using namespace std;
 
 
@@ -147,7 +147,7 @@ interval_t traverse(int query_index, interval_t interval, int size, string &S, i
 }
 
 void print_MEM (int query_index, int ref_string_index, int length){
- printf("\t%d\t%d\t%d\n", query_index, ref_string_index, length); 
+ cout << " " << query_index << " " << ref_string_index << " " << length << endl; //\t%d\t%d\t%d\n
 } 
 
 void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L) { // K is step, K-SA
