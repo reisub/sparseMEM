@@ -124,7 +124,7 @@ int main(int argc, char *argv[]) {
   for(int i = 0; i < N/K  ; i+=K) {
   int m = (int) sparseISA[i];
     if(m==0) {
-      sparseLCP[m] = 0;
+      sparseLCP[m] = -1;
     }
     else {
       int j = sparseSA[m-1];
