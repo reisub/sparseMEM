@@ -122,7 +122,6 @@ cout << endl;
   int h = 0;
   for(int i = 0; i < N/K  ; i+=K) {
   int m = (int) sparseISA[i];
-  cout << m << endl;
     if(m==0) {
       sparseLCP[m] = 0;
     }
