@@ -69,8 +69,10 @@ int main(int argc, char *argv[]) {
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
 
   int j = 0;
-  for (int i = 0; i < N / K; i++){
-	  sparseSA[i] = SA[i * K];
+  for (int i = 0; i < N; i++){
+    if (SA[i] % K == 0){
+      sparseSA[j++] = (int) SA[i];
+    }
   }
 
   for (unsigned int i = 0; i < j; ++i) {
@@ -81,11 +83,10 @@ int main(int argc, char *argv[]) {
   cout << endl;
 
   // Generate ISA A
-  for (int i = 0; i < N; i++){
-    if (SA[i] % K == 0){
-      sparseSA[j++] = (int) SA[i];
-    }
+  for(int i = 0; i < N/K  ; i++) {
+	  sparseISA[i] = sparseSA[i] / K;
   }
+
   // Generate LCP
   int h = 0;
   for(int i = 0; i < N/K  ; i+=K) {
