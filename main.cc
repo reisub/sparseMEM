@@ -60,9 +60,9 @@ int main(int argc, char *argv[]) {
   bool *types = new bool[N];
 
   int *SA = new int[N];
-  int *sparseSA = new int[N / K];
-  int *sparseISA = new int[N / K];
-  int *sparseLCP = new int[N / K];
+  int *sparseSA = new int[N/K + K];
+  int *sparseISA = new int[N/K + K];
+  int *sparseLCP = new int[N/K + K];
 
   // Creates Suffix Array using SA_IS algorithm
 
