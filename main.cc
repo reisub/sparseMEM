@@ -84,6 +84,8 @@ int main(int argc, char *argv[]) {
     << ref_string.substr(sa[i]) << std::endl;
   }
 
+cout << endl;
+
   int *SA = new int[N];
   int *sparseSA = new int[N / K];
   int *sparseISA = new int[N / K];
@@ -91,69 +93,55 @@ int main(int argc, char *argv[]) {
   short int A_, C_, T_, G_, BROJ;
   A_ = C_ = T_ = G_ = BROJ = 0;
   // Creates Suffix Array using SA_IS algorithm
+
+
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
+
+  int j = 0;
   for (int i = 0; i < N; i++){
-	if (ref_string.substr(sa[i])[0] == 'A') A_++;
-	if (ref_string.substr(sa[i])[0] == 'C') C_++;
-	if (ref_string.substr(sa[i])[0] == 'T') T_++;
-	if (ref_string.substr(sa[i])[0] == 'G') G_++;
+	//SA[i]-1 % K neznam kako uzimamo nulznak
+	if (SA[i] % K == 0){
+		sparseSA[j] = (int) SA[i];
+		cout << j << " " <<SA[i] << " " <<sparseSA[j] << endl; 
+		j++;
+	}
+
   }
 
 
-  sparseSA[0] = SA[0 * K];
-
-
-  // Generate Sparse Suffix Array, A, C, T, G
-  int j =1;
-  for (int i = 1; i < N; ++i) {
-
-    if(A_>0){
-      sparseSA[j] = SA[i * K  - (K-1)];
-      A_ = A_-K;
-    }
-
-    else if (C_>0){
-      sparseSA[j] = SA[i * K + A_ - (K-1) ];
-      C_ = C_-K;
-    }
-
-    else if (G_ >0){
-      sparseSA[j] = SA[i * K + A_ + C_ + T_  - (K-1)];
-      G_ = G_ -K;
-    }
-
-    else if (T_>0){
-      sparseSA[j] = SA[i * K + A_ + C_  - (K-1)];
-      T_ = T_-K;
-      cout << T_ << endl;
-    }
-
-    else break;
-
-    j++;
-	//sparseSA[i] = SA[i * K];
+  for (unsigned int i = 0; i < j; ++i) {
+    std::cout << "[" << i << "]\t" << sparseSA[i] << (types[sparseSA[i]] ? "\tS\t" : "\tL\t")
+    << ref_string.substr(sparseSA[i]) << std::endl;
   }
+
 
   BROJ = j;
 
-
-  for(int i = 0; i < j; i++) {
-    cout << sparseSA[i] << " ";
-  }
   cout << endl;
+
   // Generate ISA A
-  for(int i = 0; i < N/K - 1 ; i++) {
-		sparseISA[sparseSA[i] / K] = i;
+  for(int i = 0; i < N/K + 1  ; i++) {
+	sparseISA[i] = sparseSA[i] / K;
+cout << sparseSA[i]<< " ";
+cout << sparseSA[i] / K << " ";
+cout << sparseISA[sparseSA[i] / K] << endl;
   }
+
+  for(int i = 0; i < N/K -1 ; i++) {
+
+cout << sparseISA[i] << " " << ref_string.substr(sparseISA[i] * K) << endl;
+  }
+
+
+
 cout << endl;
-  for(int i = 0; i < N/K -1; i++) {
-    cout << sparseISA[sparseSA[i] / K] << " ";
-  }
+cout<< "TTTTTTEEESSTTTT"<<endl;
 
   // Generate LCP
   int h = 0;
-  for(int i = 0; i < N/K - 1 ; i+=K) {
-    int m = sparseISA[i];
+  for(int i = 0; i < N/K  ; i+=K) {
+  int m = (int) sparseISA[i];
+  cout << m << endl;
     if(m==0) {
       sparseLCP[m] = 0;
     }
@@ -162,7 +150,7 @@ cout << endl;
       while(i+h < N && j+h < N && ref_string[i+h] == ref_string[j+h]) {
         h++;
       }
-      sparseLCP[m] = h;
+      sparseLCP[m] = (int) h;
     }
     h = std::max(0, h - K);
   }
