@@ -83,13 +83,13 @@ int main(int argc, char *argv[]) {
   cout << endl;
 
   // Generate ISA A
-  for(int i = 0; i < N/K  ; i++) {
+  for(int i = 0; i < j  ; i++) {
 	  sparseISA[i] = sparseSA[i] / K;
   }
 
   // Generate LCP
   int h = 0;
-  for(int i = 0; i < N/K  ; i+=K) {
+  for(int i = 0; i < j  ; i+=K) {
   int m = (int) sparseISA[i];
     if(m==0) {
       sparseLCP[m] = -1;
@@ -105,17 +105,16 @@ int main(int argc, char *argv[]) {
   }
 
   cout << endl << "Sparse SA: ";
-  for (int i = 0; i < ceil(N/K); ++i)
+  for (int i = 0; i < j; ++i)
     cout << sparseSA[i] << "  ";
 
   cout << endl << "Sparse ISA: ";
-  for (int i = 0; i < ceil(N/K) ; ++i)
+  for (int i = 0; i < j; ++i)
     cout << sparseISA[i] << "  ";
 
   cout << endl << "Sparse LCP: ";
-  for (int i = 0; i < ceil(N/K); ++i)
+  for (int i = 0; i < j; ++i)
     cout << sparseLCP[i] << "  ";
-
 
   // Search for MEMs:
   cout << endl << "\tRef.\tQuery\tLength" << endl;
