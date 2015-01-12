@@ -68,21 +68,29 @@ int main(int argc, char *argv[]) {
   // Creates Suffix Array using SA_IS algorithm
 
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
-  ref_string.append(pad_length - 1, TERMINATION_CHAR);
- // N = ref_string.size();
 
   int j = 0;
-  if((ref_string.size()+1) % K != 0) {
-    j++;
-	}
-
   for (int i = 0; i < N; i++) {
     if (SA[i] % K == 0){
       sparseSA[j++] = (int) SA[i];
     }
   }
 
-  if((ref_string.size()+1) % K != 0) {sparseSA[0] = (j-1)*K;}
+  std::cout << "pad length: " << pad_length << std::endl;
+
+  if(pad_length % K != 0) {
+    ref_string.append(pad_length - 1, TERMINATION_CHAR);
+    N = ref_string.size();
+    j += pad_length - 1;
+
+    for (int i = N-1; i >= pad_length - 1; --i) {
+      std::cout << " i" << i;
+      sparseSA[i] = sparseSA[i - (pad_length - 1)];
+    }
+    for (int i = 0; i <= pad_length - 1; i += K) {
+      sparseSA[i] = N - i;
+    }
+  }
 
   for (unsigned int i = 0; i < j; ++i) {
     std::cout << "[" << i << "]\t" << sparseSA[i] << (types[sparseSA[i]] ? "\tS\t" : "\tL\t")
