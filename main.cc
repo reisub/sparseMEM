@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <string>
 
 #include <cmath>
 
@@ -72,6 +73,11 @@ int main(int argc, char *argv[]) {
 
   int K = atoi(argv[3]);
   int L = atoi(argv[4]);
+
+  // pad string with $
+  int pad_length = K - (ref_string.size() % K);
+  ref_string.append(pad_length, TERMINATION_CHAR);
+
   int N = ref_string.length();
 
   std::vector<int> sa;
@@ -93,7 +99,8 @@ int main(int argc, char *argv[]) {
   int *sparseLCP = new int[N / K];
   short int A_, C_, T_, G_, BROJ;
   A_ = C_ = T_ = G_ = BROJ = 0;
-  
+
+
   // Creates Suffix Array using SA_IS algorithm
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
 

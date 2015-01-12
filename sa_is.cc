@@ -156,7 +156,7 @@ int sa_is(const char *s, int *SA, int n, int alphabet_size, int cs) {
       }
     }
   for (int i = 0; i < n; ++i) {
-      std::cout << SA[i] << " "; 
+      std::cout << SA[i] << " ";
       }
   std::cout << std::endl;
 
