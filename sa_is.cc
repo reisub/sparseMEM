@@ -99,17 +99,6 @@ int sa_is(const char *s, int *SA, int n, int alphabet_size, int cs) {
   int *buckets = new int[alphabet_size + 1]();
 
   type_array(s, types, n, cs);
-
-  // std::cout << std::endl << s << std::endl;
-  // for (int i = 0; i < n; ++i) {
-  //   std::cout << (types[i] ? "S" : "L");
-  // }
-  // std::cout << std::endl;
-  // for (int i = 0; i < n; ++i) {
-  //   std::cout << (is_lms(types, i) ? "*" : " ");
-  // }
-  // std::cout << std::endl;
-
   get_buckets(s, n, buckets, alphabet_size, true, cs);
 
   for (int i = 0; i < n; ++i) {
