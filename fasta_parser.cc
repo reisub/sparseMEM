@@ -50,7 +50,8 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 			}
 		}
 	}
-
+	
+	output_string.erase(output_string.begin());
 	startpos.erase(startpos.begin());
 
 	cerr << "# output_string.length=" << output_string.length() << endl;
