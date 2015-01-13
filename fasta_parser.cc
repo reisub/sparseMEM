@@ -31,7 +31,9 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 
 		  // Reset parser state.
 			start = 0; meta = ""; length = 0;
-		}	else { // Collect sequence data.
+		}	
+		
+		else { // Collect sequence data.
 			for(long i = 0; i <= end; i++) {
 				output_string += (line[i]);
 			}
@@ -40,6 +42,7 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 	
 	output_string.erase(output_string.begin());
 	startpos.erase(startpos.begin());
+
 
 	cerr << "# output_string.length=" << output_string.length() << endl;
 	for(long i = 0; i < (long)meta_data.size(); i++) {
