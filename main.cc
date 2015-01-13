@@ -39,10 +39,10 @@ int main(int argc, char *argv[]) {
   string genom_query_file = argv[2];
   
   // Read in reference string (fasta format)
-	std::string ref_string;
+	std::string ref_string2;
 	std::vector<string> refdescr;
 	std::vector<long> startpos;
-	fasta_parser(genom_file, ref_string, refdescr, startpos);
+	fasta_parser(genom_file, ref_string2, refdescr, startpos);
 
   // Read in query string (fasta format)
 	std::string query_string;
@@ -51,13 +51,21 @@ int main(int argc, char *argv[]) {
   fasta_parser(genom_query_file, query_string, querydescr, q_startpos);
   
   // for loop to loop on all genoms in file TODO!
-  
-  //for ()
+
+
+for (int k=0; k<startpos.size(); k++){
+
+
+  std::string ref_string;
+
+
+  ref_string = ref_string2.substr (startpos[k], startpos[k+1] - startpos[k]);
+std::cout << ref_string << std::endl;
 
   // pad string with termination character $ (if needed)
   int pad_length = K - (ref_string.size() % K);
   if (ref_string.size() % K == 0) pad_length = 0;
-  ref_string.append(1, TERMINATION_CHAR);
+ // ref_string.append(1, TERMINATION_CHAR);
 
   // Create arrays to use for algorithm
   int N = ref_string.length();
@@ -69,6 +77,7 @@ int main(int argc, char *argv[]) {
   
   // Creates Suffix Array using SA_IS algorithm
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
+
 
   // pad string with additional termination characters (doesn't effect the search)
   if (pad_length > 0){
@@ -123,18 +132,24 @@ int main(int argc, char *argv[]) {
   cout << endl << "Sparse LCP: ";
   for (int i = 0; i < size; ++i)
     cout << sparseLCP[i] << "   ";
+  cout << endl;
   
   
   
   // Search the genom for MEMs
   int p0 = 0;
   MEM(p0, ref_string, sparseISA, sparseLCP, sparseSA, query_string, K, N, L);
-  
-  // Delete all resources 
+
+
   delete[] SA;
   delete[] sparseSA;
   delete[] sparseISA;
   delete[] sparseLCP;
+
+
+}
+  // Delete all resources 
+
   
   return 0;
 }

@@ -26,7 +26,7 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 
 			meta_data.push_back(meta);
 
-			output_string += '`'; // ` character used to separate strings
+			output_string += '$'; // ` character used to separate strings
 			startpos.push_back(output_string.length()-1);
 
 		  // Reset parser state.
@@ -39,7 +39,10 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 			}
 		}
 	}
-	
+
+	output_string += '$'; // ` character used to separate strings
+	startpos.push_back(output_string.length()-1);
+
 	output_string.erase(output_string.begin());
 	startpos.erase(startpos.begin());
 
