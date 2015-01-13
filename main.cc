@@ -128,11 +128,11 @@ int main(int argc, char *argv[]) {
     cout << endl;
     */
     
-    
+    cout << "#" << refdescr[k] << endl;
     // Search the genom for MEMs
     int p0 = 0;
     MEM(p0, ref_string, sparseISA, sparseLCP, sparseSA, query_string, K, N, L);
-
+    cout <<endl;
     // Delete all resources 
     delete[] SA;
     delete[] sparseSA;
