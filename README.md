@@ -3,7 +3,11 @@ sparseMEM - WORK IN PROGRESS
 
 [![Build Status](https://travis-ci.org/reisub/sparseMEM.svg?branch=master)](https://travis-ci.org/reisub/sparseMEM)
 
-An implementation of an algorithm for finding maximal exact matches in large sequence datasets using sparse suffix arrays
+An implementation of an algorithm for finding maximal exact matches in large sequence datasets using sparse suffix arrays.
+
+This was a project for Bioinformatics class at Faculty of Electrical Engineering and Computing, University of Zagreb. http://www.fer.unizg.hr/predmet/bio
+
+
 
 ## Terminology
 
