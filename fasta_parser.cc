@@ -17,8 +17,6 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 
 	if(!data.is_open()) { cerr << "unable to open " << filename << endl; exit(1); }
 
-	else cout << "all fine so far..." <<endl;
-
 	while(!data.eof()) {
 		getline(data, line); // Load one line at a time.
 		if(line.length() == 0) continue;
@@ -36,7 +34,7 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 
 			output_string += '`'; // ` character used to separate strings
 			startpos.push_back(output_string.length()-1);
-			cout << output_string.length() <<endl;
+			//cout << output_string.length() <<endl;
 
 		  // Reset parser state.
 			start = 0; meta = ""; length = 0;

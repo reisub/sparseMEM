@@ -48,17 +48,13 @@ int main(int argc, char *argv[]) {
   int L = atoi(argv[4]);
 
   // pad string with $
-
   int pad_length = K - (ref_string.size() % K);
   if (ref_string.size() % K == 0) pad_length = 0;
   ref_string.append(1, TERMINATION_CHAR);
 
   int N = ref_string.length();
 
-  std::cout << ref_string << std::endl;
-
   int *SA = new int[N + pad_length];
-
   int *sparseSA = new int[N / K + K];
   int *sparseISA = new int[N / K + K];
   int *sparseLCP = new int[N / K + K];
@@ -68,16 +64,10 @@ int main(int argc, char *argv[]) {
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
 
   if (pad_length > 0){
-	
-    std::cout << "pad_length: " << pad_length << " N " << N << std::endl;
-	N = N + pad_length;
-	for (int i=N-1; i>=pad_length; i--) SA[i] = SA[i-pad_length];
-        for (int i=0; i<N; i++) std::cout << SA[i] << " ";
-        cout << std::endl;
-	for(int i =0; i<pad_length; i++) SA[i] = ref_string.length() - 1 + (pad_length - i);
-        for (int i=0; i<N; i++) std::cout << SA[i] << " ";
-        cout << std::endl;
-	ref_string.append(pad_length, TERMINATION_CHAR);
+	  N = N + pad_length;
+	  for (int i=N-1; i>=pad_length; i--) SA[i] = SA[i-pad_length];
+	  for(int i =0; i<pad_length; i++) SA[i] = ref_string.length() - 1 + (pad_length - i);
+	  ref_string.append(pad_length, TERMINATION_CHAR);
   }
 
   
@@ -88,7 +78,6 @@ int main(int argc, char *argv[]) {
       sparseSA[j++] = (int) SA[i];
     }
   }
-std::cout << "TEST j:" << j << std::endl;
 /*
   if(pad_length % K != 0) {
     std::cout << "pad_length: " << pad_length << std::endl;
@@ -104,13 +93,6 @@ std::cout << "TEST j:" << j << std::endl;
     }
   }
 */
-
-  for (unsigned int i = 0; i < j; ++i) {
-    std::cout << "[" << i << "]\t" << sparseSA[i] << "\t"
-    << ref_string.substr(sparseSA[i]) << std::endl;
-  }
-
-  cout << endl;
 
   // Generate ISA A
   for(int i = 0; i < j  ; i++) {
@@ -136,7 +118,7 @@ std::cout << "TEST j:" << j << std::endl;
 
 
   }
-
+  /*
   cout << endl << "Sparse SA: ";
   for (int i = 0; i < j; ++i)
     cout << sparseSA[i] << "   ";
@@ -148,10 +130,9 @@ std::cout << "TEST j:" << j << std::endl;
   cout << endl << "Sparse LCP: ";
   for (int i = 0; i < j; ++i)
     cout << sparseLCP[i] << "   ";
-
+  */
   // Search for MEMs:
-  cout << endl << "\tRef.\tQuery\tLength" << endl;
-
+  //cout << endl << "\tRef.\tQuery\tLength" << endl;
   int p0 = 0;
   MEM(p0, ref_string, sparseISA, sparseLCP, sparseSA, query_string, K, N, L);
 
