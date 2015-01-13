@@ -35,7 +35,7 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 		
 		else { // Collect sequence data.
 			for(long i = 0; i <= end; i++) {
-				output_string += (line[i]);
+				if(line[i] != 'N') output_string += (line[i]);
 			}
 		}
 	}

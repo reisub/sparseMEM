@@ -55,10 +55,11 @@ int main(int argc, char *argv[]) {
   
   // for loop to loop on all genoms in file
   for (int k=0; k<startpos.size() -1; k++){
+
     std::string ref_string;
     ref_string = ref_string2.substr (startpos[k], startpos[k+1] - startpos[k]);
     //std::cout << ref_string << std::endl;
-
+cout << "ss size " << startpos.size()<< " " << startpos[k] << " " << startpos[k+1] - startpos[k]<<endl;
     // pad string with termination character $ (if needed)
     int pad_length = K - (ref_string.size() % K);
     if (ref_string.size() % K == 0) pad_length = 0;
@@ -140,7 +141,7 @@ int main(int argc, char *argv[]) {
     delete[] sparseSA;
     delete[] sparseISA;
     delete[] sparseLCP;
-    break;
+
   }
    
 return 0;
