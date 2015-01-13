@@ -3,19 +3,30 @@ LDFLAGS=
 SOURCES=main.cc sa_is.cc fasta_parser.cc search.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=main
+TEST_SOURCES=search_test.cc
+TEST_OBJECTS=$(TEST_SOURCES:.cc=.o)
+TEST_EXECUTABLE=search_test
 
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
 
+$(TEST_EXECUTABLE): $(TEST_OBJECTS)
+	$(CXX) $(LDFLAGS) $(TEST_OBJECTS) -o $@
+
 .cc.o:
 	$(CXX) $(CFLAGS) $< -o $@
 
 test: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/afumig.fasta test_cases/query.fa 5 30
+	./$(EXECUTABLE) test_cases/afumig.fasta test_cases/query.fa 2 30
 
-  
+unit: $(TEST_EXECUTABLE)
+	./$(TEST_EXECUTABLE)
+
+ref: mummer
+	./mummer -maxmatch -b -n -threads 3 test_cases/query.fa test_cases/afumig.fasta -k 2 -l 30
+
 clean:
 	-rm $(OBJECTS) $(EXECUTABLE)
 
