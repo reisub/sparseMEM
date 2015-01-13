@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
   // for loop to loop on all genoms in file TODO!
 
 
-for (int k=0; k<startpos.size(); k++){
+for (int k=0; k<startpos.size() -1; k++){
 
 
   std::string ref_string;
