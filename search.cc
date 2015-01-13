@@ -108,7 +108,7 @@ interval_t expand_link (interval_t interval, int *LCP, int K, int N) {
 	
 	if (offset == 0) return {0, 0, N - 1};
 
-	int T = 2 * offset * (long)ceil(log(N/K) / log(2.0));
+	int T = 2 * offset * (long)ceil(log(N) / log(2.0));
 	int e = 0;
 
 	while (start >= 0 and LCP[start] >= offset) {		
@@ -152,7 +152,7 @@ void print_MEM (int query_index, int ref_string_index, int length){
 
 void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L) { // K is step, K-SA
 	for (int k = 0; k <= K - 1 ; k += 1){
-		if (query_index == 0 or ref_string_index == 0){
+		if ((query_index == 0 or ref_string_index == 0) and length >= L) {
 		  print_MEM (query_index + 1, ref_string_index, length + 1); 
 			return ;	
 		}

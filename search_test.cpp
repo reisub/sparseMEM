@@ -14,11 +14,6 @@ int main(){
 	int ISA[] = {5, 4, 11, 9, 3, 10, 8, 2, 7, 6, 1, 0};
 	char c = 'i';
 	
-	assert ( 3 == MAX3(1,2,3));
-	assert ( 2 == MAX3(2,1,0));
-	assert ( 5 == MAX3(5,5,5));
-	cout << "Test passed. (MAX2 and MAX3 macros)";	
-	
 	assert(1 == binary_search_left(c, {0, 0, 11}, S, SA));
 	assert(4 == binary_search_right(c, { 0, 0, 11}, S, SA));
 	cout << "Test passed. (binary search)" << endl;
@@ -31,19 +26,6 @@ int main(){
 
 	interval_t empty, interval;
 
-	string random_string = "ABC";
-	empty = search_string(S, SA, random_string);
-	assert (empty.start == 0);
-	assert (empty.end == 0);
-	cout << "Test passed. (search_string, empty response)" << endl;
-
-	string str = "is";
-	interval_t aa = search_string(S, SA, str);
-	cout << aa.start << endl;
-	assert (aa.start == 3);
-	cout << aa.end << endl;
-	assert (aa.end == 4);
-	cout << "Test passed. (search_string, valid response)" << endl;
 
 	c = 's';
 	ret_val = topdown(c, {1, 3, 4}, S, SA);

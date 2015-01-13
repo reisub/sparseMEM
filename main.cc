@@ -72,10 +72,10 @@ int main(int argc, char *argv[]) {
 
   
 
-  int j = 0;
+  int size = 0;
   for (int i = 0; i < N; i++) {
     if (SA[i] % K == 0){
-      sparseSA[j++] = (int) SA[i];
+      sparseSA[size++] = (int) SA[i];
     }
   }
 /*
@@ -95,40 +95,38 @@ int main(int argc, char *argv[]) {
 */
 
   // Generate ISA A
-  for(int i = 0; i < j  ; i++) {
+  for(int i = 0; i < size  ; i++) {
 	  sparseISA[sparseSA[i] / K] = i ;
   }
 
   // Generate LCP
-  int h = 0;
-  for(int i = 0; i < j  ; i++) {
-  int m = (int) sparseISA[i];
-    if(m==0) {
-      sparseLCP[m] = -1;
-    }
+  int matched = 0;
+  int j = 0;
+  int i = 0;
+  for(int iter = 0; iter < size; iter++) {
+    i = (int) sparseSA[iter];
+    j = (int) sparseSA[iter - 1];
+    if(iter == 0) sparseLCP[iter] = -1; // request for first member
     else {
-      int j = sparseSA[m-1];
-
-      while(i+h < N && j+h < N && ref_string[i+h] == ref_string[j+h]) {
-        h++;
-      }
-      sparseLCP[m] = (int) h;
+      while((i + matched < N) && (j + matched < N) && 
+        (ref_string[i + matched] == ref_string[j + matched])) 
+          ++matched;
+      sparseLCP[iter] = (int) matched;
+      matched = 0;
     }
-    h = std::max(0, (h - K));
-
-
   }
+  
   /*
   cout << endl << "Sparse SA: ";
-  for (int i = 0; i < j; ++i)
+  for (int i = 0; i < size; ++i)
     cout << sparseSA[i] << "   ";
 
   cout << endl << "Sparse ISA: ";
-  for (int i = 0; i < j; ++i)
+  for (int i = 0; i < size; ++i)
     cout << sparseISA[i] << "   ";
 
   cout << endl << "Sparse LCP: ";
-  for (int i = 0; i < j; ++i)
+  for (int i = 0; i < size; ++i)
     cout << sparseLCP[i] << "   ";
   */
   // Search for MEMs:
