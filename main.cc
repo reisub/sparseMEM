@@ -48,14 +48,16 @@ int main(int argc, char *argv[]) {
   int L = atoi(argv[4]);
 
   // pad string with $
+
   int pad_length = K - (ref_string.size() % K);
+  if (ref_string.size() % K == 0) pad_length = 0;
   ref_string.append(1, TERMINATION_CHAR);
 
   int N = ref_string.length();
 
   std::cout << ref_string << std::endl;
 
-  int *SA = new int[N];
+  int *SA = new int[N + pad_length];
 
   int *sparseSA = new int[N / K + K];
   int *sparseISA = new int[N / K + K];
@@ -65,13 +67,29 @@ int main(int argc, char *argv[]) {
 
   sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
 
+  if (pad_length > 0){
+	
+    std::cout << "pad_length: " << pad_length << " N " << N << std::endl;
+	N = N + pad_length;
+	for (int i=N-1; i>=pad_length; i--) SA[i] = SA[i-pad_length];
+        for (int i=0; i<N; i++) std::cout << SA[i] << " ";
+        cout << std::endl;
+	for(int i =0; i<pad_length; i++) SA[i] = ref_string.length() - 1 + (pad_length - i);
+        for (int i=0; i<N; i++) std::cout << SA[i] << " ";
+        cout << std::endl;
+	ref_string.append(pad_length, TERMINATION_CHAR);
+  }
+
+  
+
   int j = 0;
   for (int i = 0; i < N; i++) {
     if (SA[i] % K == 0){
       sparseSA[j++] = (int) SA[i];
     }
   }
-
+std::cout << "TEST j:" << j << std::endl;
+/*
   if(pad_length % K != 0) {
     std::cout << "pad_length: " << pad_length << std::endl;
     ref_string.append(pad_length, TERMINATION_CHAR);
@@ -85,6 +103,7 @@ int main(int argc, char *argv[]) {
       sparseSA[i] = N - i - 1;
     }
   }
+*/
 
   for (unsigned int i = 0; i < j; ++i) {
     std::cout << "[" << i << "]\t" << sparseSA[i] << "\t"
@@ -100,32 +119,35 @@ int main(int argc, char *argv[]) {
 
   // Generate LCP
   int h = 0;
-  for(int i = 0; i < j  ; i+=K) {
+  for(int i = 0; i < j  ; i++) {
   int m = (int) sparseISA[i];
     if(m==0) {
       sparseLCP[m] = -1;
     }
     else {
       int j = sparseSA[m-1];
+
       while(i+h < N && j+h < N && ref_string[i+h] == ref_string[j+h]) {
         h++;
       }
       sparseLCP[m] = (int) h;
     }
-    h = std::max(0, h - K);
+    h = std::max(0, (h - K));
+
+
   }
 
   cout << endl << "Sparse SA: ";
   for (int i = 0; i < j; ++i)
-    cout << sparseSA[i] << "  ";
+    cout << sparseSA[i] << "   ";
 
   cout << endl << "Sparse ISA: ";
   for (int i = 0; i < j; ++i)
-    cout << sparseISA[i] << "  ";
+    cout << sparseISA[i] << "   ";
 
   cout << endl << "Sparse LCP: ";
   for (int i = 0; i < j; ++i)
-    cout << sparseLCP[i] << "  ";
+    cout << sparseLCP[i] << "   ";
 
   // Search for MEMs:
   cout << endl << "\tRef.\tQuery\tLength" << endl;
