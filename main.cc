@@ -116,6 +116,9 @@ int main(int argc, char *argv[]) {
     }
   }
   
+  for(int i = 0; i < N; i++)
+    cout << "[" << i <<"] " << ref_string.substr(SA[i]) << endl;
+  
   /*
   cout << endl << "Sparse SA: ";
   for (int i = 0; i < size; ++i)
