@@ -1,4 +1,4 @@
-CFLAGS=-g -c -Wall -Wextra -std=c++11
+CFLAGS=-c -O3 -Wall -Wextra -std=c++11
 LDFLAGS=
 SOURCES=main.cc sa_is.cc fasta_parser.cc search.cc
 OBJECTS=$(SOURCES:.cc=.o)
