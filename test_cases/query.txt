@@ -1,2 +1,0 @@
->gq|71025128|Aspergillus fumigatus query sequence
-CTAACCCTAACCCTAACCCTAACCCTAACCCTAA

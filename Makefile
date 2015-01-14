@@ -18,29 +18,38 @@ $(TEST_EXECUTABLE): $(TEST_OBJECTS) $(OBJECTS)
 .cc.o:
 	$(CXX) $(CFLAGS) $< -o $@
 
-test: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/mississippi.fasta test_cases/mississippi_query.fasta 1 3
+test1: $(EXECUTABLE)
+	./$(EXECUTABLE) test_cases/sequence1.fasta test_cases/query1.fasta 2 10
 
 test2: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/afumig_small.fasta test_cases/query.txt 2 30
+	./$(EXECUTABLE) test_cases/sequence2.fasta test_cases/query2.fasta 2 10
 
 test3: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/anidulans.fasta test_cases/q_anidulans 2 30
+	./$(EXECUTABLE) test_cases/sequence3.fasta test_cases/query3.fasta 2 10
 
 test4: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/human21_short.fasta test_cases/human21_short_query.fasta 1 20
+	./$(EXECUTABLE) test_cases/sequence4.fasta test_cases/query4.fasta 2 10
+
+test5: $(EXECUTABLE)
+	./$(EXECUTABLE) test_cases/sequence5.fasta test_cases/query5.fasta 2 10
+
+test6: $(EXECUTABLE)
+	./$(EXECUTABLE) test_cases/sequence6.fasta test_cases/query6.fasta 2 10
+
+test7: $(EXECUTABLE)
+	./$(EXECUTABLE) test_cases/sequence7.fasta test_cases/query7.fasta 2 10
+
+test8: $(EXECUTABLE)
+	./$(EXECUTABLE) test_cases/sequence8.fasta test_cases/query8.fasta 2 10
+
+test9: $(EXECUTABLE)
+	./$(EXECUTABLE) test_cases/sequence9.fasta test_cases/query9.fasta 2 10
+
+test10: $(EXECUTABLE)
+	./$(EXECUTABLE) test_cases/sequence10.fasta test_cases/query10.fasta 2 10
 
 unit: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
-
-ref2: mummer
-	./mummer -maxmatch -b -n -threads 3 test_cases/query.txt test_cases/simple.txt -k 2 -l 30
-	
-ref3: mummer
-	./mummer -maxmatch -b -n -threads 3 test_cases/q_anidulans test_cases/anidulans.fasta -k 2 -l 30
-	
-ref4: mummer
-	./mummer -maxmatch -b -n -threads 3 test_cases/human21_short_query.fasta test_cases/human21_short.fasta -k 1 -l 20
 
 clean:
 	-rm $(OBJECTS) $(EXECUTABLE)
