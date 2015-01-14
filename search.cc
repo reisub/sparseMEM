@@ -117,7 +117,6 @@ interval_t suffix_link (interval_t interval, int *ISA, int *SA, int *LCP, int K,
 * Addition function to suffix_link.
 * Tries to build a interval by looking only at  
 */
-
 interval_t expand_link (interval_t interval, int *LCP, int K, int N) {
 	int offset = interval.depth;
 	int start = interval.start;
