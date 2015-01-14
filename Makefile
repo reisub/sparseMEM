@@ -21,6 +21,9 @@ $(TEST_EXECUTABLE): $(TEST_OBJECTS) $(OBJECTS)
 test: $(EXECUTABLE)
 	./$(EXECUTABLE) test_cases/mississippi.fasta test_cases/mississippi_query.fasta 1 2
 
+test2: $(EXECUTABLE)
+	./$(EXECUTABLE) test_cases/afumig_small.fasta test_cases/query.txt 1 30
+
 unit: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
 
