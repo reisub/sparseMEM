@@ -19,16 +19,22 @@ $(TEST_EXECUTABLE): $(TEST_OBJECTS) $(OBJECTS)
 	$(CXX) $(CFLAGS) $< -o $@
 
 test: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/afumig_small.fasta test_cases/query.txt 1 30
+	./$(EXECUTABLE) test_cases/mississippi.fasta test_cases/mississippi_query.fasta 2 2
 
 test2: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/afumig_small.fasta test_cases/query.txt 1 30
+	./$(EXECUTABLE) test_cases/afumig_small.fasta test_cases/query.txt 2 30
+
+test3: $(EXECUTABLE)
+	./$(EXECUTABLE) test_cases/anidulans.fasta test_cases/q_anidulans 2 30
 
 unit: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
 
-ref: mummer
-	./mummer -maxmatch -b -n -threads 3 test_cases/query.txt test_cases/simple.txt -k 1 -l 30
+ref2: mummer
+	./mummer -maxmatch -b -n -threads 3 test_cases/query.txt test_cases/simple.txt -k 2 -l 30
+	
+ref3: mummer
+	./mummer -maxmatch -b -n -threads 3 test_cases/q_anidulans test_cases/anidulans.fasta -k 2 -l 30
 
 clean:
 	-rm $(OBJECTS) $(EXECUTABLE)

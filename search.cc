@@ -88,7 +88,7 @@ interval_t topdown(char cmp_char, interval_t interval, string &S, int *SA) {
 	}
   //cout  <<"interval: " << interval.depth <<" " << interval.start << " " << interval.end << endl;
 	lower_bound = binary_search_left (cmp_char, interval, S, SA);
-	//cout << "lower bound " << lower_bound << endl;
+  //cout << "lower bound " << lower_bound << endl;
 	upper_bound = binary_search_right (cmp_char, interval, S, SA);
 	//cout << "upper bound " << upper_bound << endl;
 	if (lower_bound <= upper_bound) {
@@ -267,13 +267,13 @@ void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query,
 		//cout << "[MEM_interval] depth: " << MEM_interval.depth <<" start: " <<MEM_interval.start << " end: " << MEM_interval.end << endl;
 		if (SA_interval.depth <= 1) {
 			SA_interval = MEM_interval = {0, 0, N / K - 1};
-			curr_index += K;
+			curr_index ++;
 			continue;
 		}
 
 		if (SA_interval.depth >= (L - (K - 1)))
 			collect_MEMs(curr_index, SA_interval, MEM_interval, S, query, SA, LCP, K, N, L);
-		curr_index += K;
+		curr_index ++;
 
 		SA_interval = suffix_link (SA_interval, ISA, SA, LCP, K, N);
 		MEM_interval = suffix_link (MEM_interval, ISA, SA, LCP, K, N);

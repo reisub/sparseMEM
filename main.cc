@@ -137,6 +137,7 @@ int main(int argc, char *argv[]) {
     delete[] sparseSA;
     delete[] sparseISA;
     delete[] sparseLCP;
+    break;
   }
    
 return 0;
