@@ -13,10 +13,10 @@
 #include "search.h"
 
 int main(int argc, char *argv[]) {
-  
+
    string line = "";
    getline(cin, line);
-   
+
   if(argc != 5) {
     std::cerr << "Usage: " << argv[0] << " <file containing reference string> <file containing query string> <index level of sparseSA, K-SA> <size of minimal match>" << std::endl;
     exit(-1);
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
   int L = atoi(argv[4]);
   string genom_file = argv[1];
   string genom_query_file = argv[2];
-  
+
   // Read in reference string (fasta format)
 	std::string ref_string2;
 	std::vector<string> refdescr;
@@ -52,14 +52,13 @@ int main(int argc, char *argv[]) {
 	std::vector<string> querydescr;
 	std::vector<long> q_startpos;
   fasta_parser(genom_query_file, query_string, querydescr, q_startpos);
-  
+
   // for loop to loop on all genoms in file
   for (int k=0; k<startpos.size() -1; k++){
 
     std::string ref_string;
     ref_string = ref_string2.substr (startpos[k], startpos[k+1] - startpos[k]);
-    //std::cout << ref_string << std::endl;
-cout << "ss size " << startpos.size()<< " " << startpos[k] << " " << startpos[k+1] - startpos[k]<<endl;
+
     // pad string with termination character $ (if needed)
     int pad_length = K - (ref_string.size() % K);
     if (ref_string.size() % K == 0) pad_length = 0;
@@ -72,10 +71,8 @@ cout << "ss size " << startpos.size()<< " " << startpos[k] << " " << startpos[k+
     int *sparseISA = new int[N / K + K];
     int *sparseLCP = new int[N / K + K];
 
-    
     // Creates Suffix Array using SA_IS algorithm
     sa_is(ref_string.c_str(), SA, N, 256, sizeof(char));
-
 
     // pad string with additional termination characters (doesn't effect the search)
     if (pad_length > 0){
@@ -85,7 +82,6 @@ cout << "ss size " << startpos.size()<< " " << startpos[k] << " " << startpos[k+
       ref_string.append(pad_length, TERMINATION_CHAR);
     }
 
-    
     // Generate sparse SA
     int size = 0;
     for (int i = 0; i < N; i++) {
@@ -108,43 +104,27 @@ cout << "ss size " << startpos.size()<< " " << startpos[k] << " " << startpos[k+
       j = (int) sparseSA[iter - 1];
       if(iter == 0) sparseLCP[iter] = -1; // request for first member
       else {
-        while((i + matched < N) && (j + matched < N) && 
-          (ref_string[i + matched] == ref_string[j + matched])) 
+        while((i + matched < N) && (j + matched < N) &&
+          (ref_string[i + matched] == ref_string[j + matched]))
             ++matched;
         sparseLCP[iter] = (int) matched;
         matched = 0;
       }
     }
 
-    /*
-    for(int i = 0; i < N; i++) cout << "[" << i <<"] " << ref_string.substr(SA[i]) << endl;
-     
-    cout << endl << "Sparse SA: ";
-    for (int i = 0; i < size; ++i)
-      cout << sparseSA[i] << "   ";
-    cout << endl << "Sparse ISA: ";
-    for (int i = 0; i < size; ++i)
-      cout << sparseISA[i] << "   ";
-
-    cout << endl << "Sparse LCP: ";
-    for (int i = 0; i < size; ++i)
-      cout << sparseLCP[i] << "   ";
-    cout << endl;
-    */
-    
-    cout << "#" << refdescr[k] << endl;
+    cout << "# " << refdescr[k] << endl;
     // Search the genom for MEMs
     int p0 = 0;
     MEM(p0, ref_string, sparseISA, sparseLCP, sparseSA, query_string, K, N, L);
-    // Delete all resources 
+    // Delete all resources
     delete[] SA;
     delete[] sparseSA;
     delete[] sparseISA;
     delete[] sparseLCP;
 
   }
-   
-return 0;
+
+  return 0;
 }
 
 
