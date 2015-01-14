@@ -7,7 +7,15 @@ An implementation of an algorithm for finding maximal exact matches in large seq
 
 This was a project for Bioinformatics class at Faculty of Electrical Engineering and Computing, University of Zagreb. http://www.fer.unizg.hr/predmet/bio
 
+## Prerequisites
 
+- linux or OS X
+- gcc 4.8+ or clang 3.4+
+
+## Usage
+
+    make
+    ./main <sequence.fasta> <query.fasta> <index level of sparse SA, K> <minimal match size>
 
 ## Terminology
 
