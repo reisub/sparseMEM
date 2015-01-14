@@ -10,24 +10,17 @@
 void fasta_parser(string filename, string &output_string, vector<string> &meta_data, vector<long> &startpos) {
 	string meta, line;
 	long length = 0;
-
 	startpos.push_back(0);
-
 	ifstream data(filename.c_str());
 
 	if(!data.is_open()) { cerr << "unable to open " << filename << endl; exit(1); }
-	 int flag = 0;
-	while(!data.eof() and flag < 2) {
+	while(!data.eof() {
 		getline(data, line); // Load one line at a time.
 		if(line.length() == 0) continue;
 
 		long start = 0, end = line.length() - 1;
-    
 		// Meta tag line and start of a new sequence.
 		if(line[0] == '>') {
-      flag ++;
-      
-  
 			for(long i = start; i <=  end; i++) { if(line[i] == ' ') break; meta += line[i];
 			}
 
@@ -35,15 +28,10 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 
 			output_string += '`'; // ` character used to separate strings
 			startpos.push_back(output_string.length()-1);
-			//cout << output_string.length() <<endl;
 
 		  // Reset parser state.
 			start = 0; meta = ""; length = 0;
-		}
-
-
-		else { // Collect sequence data.
-
+		}	else { // Collect sequence data.
 			for(long i = 0; i <= end; i++) {
 				output_string += (line[i]);
 			}
