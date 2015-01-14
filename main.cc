@@ -13,7 +13,10 @@
 #include "search.h"
 
 int main(int argc, char *argv[]) {
-
+  
+   string line = "";
+   getline(cin, line);
+   
   if(argc != 5) {
     std::cerr << "Usage: " << argv[0] << " <file containing reference string> <file containing query string> <index level of sparseSA, K-SA> <size of minimal match>" << std::endl;
     exit(-1);
