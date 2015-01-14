@@ -3,17 +3,11 @@ LDFLAGS=
 SOURCES=main.cc sa_is.cc fasta_parser.cc search.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=main
-TEST_SOURCES=search_test.cc
-TEST_OBJECTS=$(TEST_SOURCES:.cc=.o)
-TEST_EXECUTABLE=search_test
 
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
-
-$(TEST_EXECUTABLE): $(TEST_OBJECTS) $(OBJECTS)
-	$(CXX) $(LDFLAGS) $(TEST_OBJECTS) -o $@
 
 .cc.o:
 	$(CXX) $(CFLAGS) $< -o $@
@@ -48,8 +42,8 @@ test9: $(EXECUTABLE)
 test10: $(EXECUTABLE)
 	./$(EXECUTABLE) test_cases/sequence10.fasta test_cases/query10.fasta 2 10
 
-unit: $(TEST_EXECUTABLE)
-	./$(TEST_EXECUTABLE)
+test11: $(EXECUTABLE)
+	./$(EXECUTABLE) test_cases/sequence11.fasta test_cases/query11.fasta 2 10
 
 clean:
 	-rm $(OBJECTS) $(EXECUTABLE)
