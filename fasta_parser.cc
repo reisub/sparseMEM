@@ -16,18 +16,19 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 	ifstream data(filename.c_str());
 
 	if(!data.is_open()) { cerr << "unable to open " << filename << endl; exit(1); }
-
-	while(!data.eof()) {
+	 int flag = 0;
+	while(!data.eof() and flag < 2) {
 		getline(data, line); // Load one line at a time.
 		if(line.length() == 0) continue;
 
 		long start = 0, end = line.length() - 1;
-
+    
 		// Meta tag line and start of a new sequence.
 		if(line[0] == '>') {
-
-
-			for(long i = start; i <= end; i++) { if(line[i] == ' ') break; meta += line[i];
+      flag ++;
+      
+  
+			for(long i = start; i <=  end; i++) { if(line[i] == ' ') break; meta += line[i];
 			}
 
 			meta_data.push_back(meta);

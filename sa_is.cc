@@ -144,7 +144,7 @@ int sa_is(const char *s, int *SA, int n, int alphabet_size, int cs) {
         break;
       }
     }
-
+  
     if (diff) {
       name++;
       prev = pos;
