@@ -288,7 +288,16 @@ void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query,
 	}
 
 	for (int i = 0; i < mems.size(); ++i) {
-		print_MEM(mems[i]);
+		bool falsePositive = false;
+		for (int j = 0; j < mems.size(); ++j) {
+			if (mems[i].string_index == mems[j].string_index and mems[i].length < mems[j].length) {
+				falsePositive = true;
+				break;
+			}
+		}
+		if(!falsePositive) {
+			print_MEM(mems[i]);
+		}
 	}
 
 	return ; // MEMs;
