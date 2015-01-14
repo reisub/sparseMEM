@@ -160,12 +160,12 @@ interval_t traverse(int query_index, interval_t interval, int size, string &S, i
   cout << "query: " << query << "\n";
   cout << "size: " << size << endl ;
   cout << "interval: " << interval.depth <<" " << interval.start << " " << interval.end << endl;
-  */
-  int i = 0;
+  int i = 0; 
+	*/
 	while (query_index + interval.depth < (signed) query.length()) {
 		triplet_tmp = topdown (query [query_index + interval.depth],	interval, S, SA);
     //cout << i++ <<"interval: " << triplet_tmp.depth <<" " << triplet_tmp.start << " " << triplet_tmp.end << endl;
-		
+		break;
 		if (triplet_tmp.depth == -1 )
 			return interval;	
 
@@ -188,15 +188,15 @@ void print_MEM (int query_index, int ref_string_index, int length){
 * Tries to expand matched query 
 */
 void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L) { // K is step, K-SA
-	for (int k = 0; k < K  ; k += 1) {
-		if (query_index == 0 or ref_string_index == 0) {
-		  if (length >= L) print_MEM (query_index, ref_string_index, length); 
-			else		return ;	
+	for (int k = 0; k <= K - 1 ; k += 1){
+		if ((query_index == 0 or ref_string_index == 0) and length >= L) {
+		  print_MEM (query_index + 1, ref_string_index, length + 1); 
+			return ;	
 		}
 		
-		else if (query[query_index - 1] != S[ref_string_index - 1]) {
-			if (length >= L) print_MEM (query_index + 1, ref_string_index, length + 1); 
-			else return ;
+		if (query[query_index - 1] != S[ref_string_index - 1] and length >= L){
+			print_MEM (query_index + 1, ref_string_index, length + 1); 
+			return ;
 		}
 
 		query_index -= 1; 
@@ -204,13 +204,12 @@ void findL (int query_index, int ref_string_index, int length, string &S, string
 		length += 1;
 	}
 }
+
 /*
 * Collects all the matches
 */
 void collect_MEMs (int curr_index, interval_t SA_i, interval_t MEM_i, string &S, string &query, int *SA, int *LCP, int K, int N, int L) {
-	int SA_index = SA_i.depth;
-	int SA_start = SA_i.start;
-	int SA_end = SA_i.end;
+		int SA_index = SA_i.depth;
 	int MEM_start = MEM_i.start;
 	int MEM_end = MEM_i.end;
 	int MEM_index = MEM_i.depth;
@@ -218,8 +217,6 @@ void collect_MEMs (int curr_index, interval_t SA_i, interval_t MEM_i, string &S,
 	for (int i = MEM_start; i <= MEM_end; i += 1)
 		findL (curr_index, SA[i], MEM_index, S, query, K, L);
 
-  if(SA_index == MEM_start && SA_end == MEM_end) return;
-  
 	while (MEM_index >= SA_index) { 
 		if (MEM_end + 1 < N/K) {
 			MEM_index = max (LCP[MEM_start], LCP[MEM_end + 1]);
@@ -262,41 +259,30 @@ void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query,
   */
   if (L < K) return;
   
-	while (curr_index < (query.length() - (K - query_index))) {
+	while (curr_index < (N - (K - query_index))) {
 		SA_interval = traverse (curr_index, SA_interval, L - (K - 1), S, SA, query);
 		//cout << "SA: " << SA_interval.depth <<" " <<SA_interval.start << " " << SA_interval.end << endl;
-		if (SA_interval.depth > MEM_interval.depth) MEM_interval = SA_interval;
-    //cout << "MEM: " << MEM_interval.depth <<" " <<MEM_interval.start << " " << MEM_interval.end << endl;
+		MEM_interval = traverse (curr_index, MEM_interval, query.length(), S, SA, query);
+    break;
 		if (SA_interval.depth <= 1) {
 			SA_interval = MEM_interval = {0, 0, N / K - 1};
 			curr_index += K;
 			continue;
 		}
 
-		if (SA_interval.depth >= (L - (K - 1))) {
-			MEM_interval = traverse (curr_index, MEM_interval, query.length(), S, SA, query);
-			collect_MEMs(curr_index, SA_interval, MEM_interval, S, query, SA, LCP, K, N, L); //
-		  curr_index += K;
-		  
-		  SA_interval = suffix_link (SA_interval, ISA, SA, LCP, K, N);
-		  if (SA_interval.depth == -1) {
-			  SA_interval = MEM_interval = {0,  0, N / K - 1};
-			  continue;
-		  }
-		  MEM_interval = suffix_link (MEM_interval, ISA, SA, LCP, K, N);
-    
-    } else {
-      curr_index +=K ;
-      SA_interval = suffix_link (SA_interval, ISA, SA, LCP, K, N);
-		  if (SA_interval.depth == -1) {
-			  SA_interval = MEM_interval = {0,  0, N / K - 1};
-			  continue;
-		  }
-		  MEM_interval = SA_interval;
-		
+		if (SA_interval.depth >= (L - (K - 1)))
+			collect_MEMs(curr_index, SA_interval, MEM_interval, S, query, SA, LCP, K, N, L);
+		curr_index += K;
+
+		SA_interval = suffix_link (SA_interval, ISA, SA, LCP, K, N);
+		MEM_interval = suffix_link (MEM_interval, ISA, SA, LCP, K, N);
+
+		if (SA_interval.depth == -1) {
+			SA_interval = MEM_interval = {0,  0, N / K - 1};
+			continue;
 		}
 	}
 
-	return ; // MEM;
+	return ; // MEMs;
 }
 
