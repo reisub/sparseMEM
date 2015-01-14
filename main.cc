@@ -51,6 +51,8 @@ int main(int argc, char *argv[]) {
   fasta_parser(genom_query_file, query_string, querydescr, q_startpos);
   
   // for loop to loop on all genoms in file TODO!
+  
+  //for ()
 
   // pad string with termination character $ (if needed)
   int pad_length = K - (ref_string.size() % K);
