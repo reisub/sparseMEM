@@ -93,7 +93,7 @@ interval_t topdown(char cmp_char, interval_t interval, string &S, int *SA) {
 	//cout << "upper bound " << upper_bound << endl;
 	if (lower_bound <= upper_bound) {
 	  //cout << "return values: " << offset + 1 <<  " " << lower_bound << " " << upper_bound << " " << endl;
-		return {offset + 1, lower_bound, upper_bound};
+		return {offset + 1, lower_bound, upper_bound}; // ITERATION
 	}	
 
 	return {-1, 0, 0};
@@ -110,8 +110,8 @@ interval_t suffix_link (interval_t interval, int *ISA, int *SA, int *LCP, int K,
 	offset = offset -  K;
 	if (offset <= 0) return {-1, 0, 0};
 
-	start = ISA[SA[start] / K + 1];
-	end = ISA[SA[end] / K + 1];
+	start = ISA[SA[start] / K ];
+	end = ISA[SA[end] / K ]; // BUG! bio ovdje
 
 	return expand_link({offset, start, end}, LCP, K, N); 
 }
@@ -164,14 +164,15 @@ interval_t traverse(int query_index, interval_t interval, int size, string &S, i
   cout << "interval: " << interval.depth <<" " << interval.start << " " << interval.end << endl;
   */
   int i = 0; 
-	while (query_index + interval.depth < (signed) query.length()) {
+	while ((query_index + interval.depth) < query.length()) {
+	  //cout << "\n[" << i  << "] " <<"interval: " << triplet_tmp.depth <<" " << triplet_tmp.start << " " << triplet_tmp.end << endl;
 		triplet_tmp = topdown (query [query_index + interval.depth],	interval, S, SA);
     //cout << "\n[" << i++  << "] " <<"interval: " << triplet_tmp.depth <<" " << triplet_tmp.start << " " << triplet_tmp.end << endl;
 		if (triplet_tmp.depth == -1 )
 			return interval;	
 
 		interval = triplet_tmp;
-		if (interval.depth > size) 
+		if (interval.depth >= size) 
 			break;		
 	}
 	
@@ -186,10 +187,10 @@ void print_MEM (int query_index, int ref_string_index, int length){
 } 
 
 /* 
-* Tries to expand matched query 
+* Tries to expand matched query  (to the left)
 */
 void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L) { // K is step, K-SA
-	for (int k = 0; k <= K - 1 ; k += 1){
+	for (int k = 0; k < K ; k += 1){
 		if ((query_index == 0 or ref_string_index == 0) and length >= L) {
 		  print_MEM (query_index + 1, ref_string_index + 1, length); 
 			return ;	
@@ -207,7 +208,7 @@ void findL (int query_index, int ref_string_index, int length, string &S, string
 }
 
 /*
-* Collects all the matches
+* Collects all the matches (Finds the maximum string that ccan be expanded to the right, and tests if for Lmatch)
 */
 void collect_MEMs (int curr_index, interval_t SA_i, interval_t MEM_i, string &S, string &query, int *SA, int *LCP, int K, int N, int L) {
 	int SA_index = SA_i.depth;
@@ -219,7 +220,7 @@ void collect_MEMs (int curr_index, interval_t SA_i, interval_t MEM_i, string &S,
 		findL (curr_index, SA[i], MEM_index, S, query, K, L);
 
 	while (MEM_index >= SA_index) { 
-		if (MEM_end + 1 < N/K) {
+		if (MEM_end + 1 < N/K) { //changed
 			MEM_index = max (LCP[MEM_start], LCP[MEM_end + 1]);
 		} else {
 		  MEM_index = LCP[MEM_start];
@@ -230,7 +231,7 @@ void collect_MEMs (int curr_index, interval_t SA_i, interval_t MEM_i, string &S,
 				MEM_start -= 1;
 				findL (curr_index, SA[MEM_start], MEM_index, S, query, K, L);
 			}
-			while ((MEM_end + 1) < N/K and LCP[MEM_end + 1] >= MEM_index) {
+			while ((MEM_end + 1) < N/K and LCP[MEM_end + 1] >= MEM_index) { // changed
 				MEM_end += 1;
 				findL (curr_index, SA[MEM_end], MEM_index, S, query, K, L);
 			}
