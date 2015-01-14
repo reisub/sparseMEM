@@ -182,7 +182,7 @@ interval_t traverse(int query_index, interval_t interval, int size, string &S, i
 * Prints out all maximal exact matches of at least L characters
 */
 void print_MEM (int query_index, int ref_string_index, int length){
-  cout << "\t" << ref_string_index  << "\t" << query_index << "\t" << length << endl; 
+  cout << "\t" << query_index << "\t" << ref_string_index << "\t" << length << endl; 
 } 
 
 /* 
@@ -191,12 +191,12 @@ void print_MEM (int query_index, int ref_string_index, int length){
 void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L) { // K is step, K-SA
 	for (int k = 0; k <= K - 1 ; k += 1){
 		if ((query_index == 0 or ref_string_index == 0) and length >= L) {
-		  print_MEM (query_index + 1, ref_string_index, length + 1); 
+		  print_MEM (query_index + 1, ref_string_index + 1, length); 
 			return ;	
 		}
 		
 		if (query[query_index - 1] != S[ref_string_index - 1] and length >= L){
-			print_MEM (query_index + 1, ref_string_index, length + 1); 
+			print_MEM (query_index + 1, ref_string_index + 1, length); 
 			return ;
 		}
 
