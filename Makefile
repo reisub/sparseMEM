@@ -1,4 +1,4 @@
-CFLAGS=-O3 -c -Wall -Wextra -std=c++11
+CFLAGS=-g -c -Wall -Wextra -std=c++11
 LDFLAGS=
 SOURCES=main.cc sa_is.cc fasta_parser.cc search.cc
 OBJECTS=$(SOURCES:.cc=.o)
@@ -19,7 +19,7 @@ $(TEST_EXECUTABLE): $(TEST_OBJECTS) $(OBJECTS)
 	$(CXX) $(CFLAGS) $< -o $@
 
 test: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/simple.txt test_cases/query.txt 1 30
+	./$(EXECUTABLE) test_cases/mississippi.fasta test_cases/mississippi_query.fasta 1 2
 
 unit: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)

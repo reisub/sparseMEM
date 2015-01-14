@@ -14,6 +14,7 @@ int binary_search_left (char cmp_char, interval_t interval, string &S, int *SA) 
 	int start = interval.start;
 	int end = interval.end;	
 	
+	//cout << "BSEARCH_LEFT" << endl;
 	if (cmp_char == S[SA[start] + depth]) {
 		return start;
 	}
@@ -85,11 +86,11 @@ interval_t topdown(char cmp_char, interval_t interval, string &S, int *SA) {
 	if (cmp_char > S[SA[end] + offset]){
 		return {-1, 0, 0};
 	}
-  //cout  <<"interval: " << interval.depth <<" " << interval.start << " " << interval.end << endl;
+  cout  <<"interval: " << interval.depth <<" " << interval.start << " " << interval.end << endl;
 	lower_bound = binary_search_left (cmp_char, interval, S, SA);
-	//cout << "lower bound " << lower_bound << endl;
+	cout << "lower bound " << lower_bound << endl;
 	upper_bound = binary_search_right (cmp_char, interval, S, SA);
-	//cout << "upper bound " << upper_bound << endl;
+	cout << "upper bound " << upper_bound << endl;
 	if (lower_bound <= upper_bound) {
 		return {offset + 1, lower_bound, upper_bound};
 	}	
@@ -160,11 +161,11 @@ interval_t traverse(int query_index, interval_t interval, int size, string &S, i
   cout << "query: " << query << "\n";
   cout << "size: " << size << endl ;
   cout << "interval: " << interval.depth <<" " << interval.start << " " << interval.end << endl;
+  */
   int i = 0; 
-	*/
 	while (query_index + interval.depth < (signed) query.length()) {
 		triplet_tmp = topdown (query [query_index + interval.depth],	interval, S, SA);
-    //cout << i++ <<"interval: " << triplet_tmp.depth <<" " << triplet_tmp.start << " " << triplet_tmp.end << endl;
+    cout << "\n[" << i++  << "] " <<"interval: " << triplet_tmp.depth <<" " << triplet_tmp.start << " " << triplet_tmp.end << endl;
 		break;
 		if (triplet_tmp.depth == -1 )
 			return interval;	
@@ -209,7 +210,7 @@ void findL (int query_index, int ref_string_index, int length, string &S, string
 * Collects all the matches
 */
 void collect_MEMs (int curr_index, interval_t SA_i, interval_t MEM_i, string &S, string &query, int *SA, int *LCP, int K, int N, int L) {
-		int SA_index = SA_i.depth;
+	int SA_index = SA_i.depth;
 	int MEM_start = MEM_i.start;
 	int MEM_end = MEM_i.end;
 	int MEM_index = MEM_i.depth;
@@ -250,20 +251,20 @@ void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query,
 	interval_t SA_interval = {0, 0, N / K - 1};
 	interval_t MEM_interval = {0, 0, N / K - 1};
 	int curr_index = query_index;
-	/*
+	
   cout << "\nMEM\n";
-  cout << "query_index: " << query_index <<   "\n";
+  /*cout << "query_index: " << query_index <<   "\n";
   cout << "string: " << S <<"\n";
   cout << "query: " << query << "\n";
   cout << "K: " << K << " N:" << N << " L: " << L <<endl ;
   */
   if (L < K) return;
   
-	while (curr_index < (N - (K - query_index))) {
+	while (curr_index < (query.length() - (K - query_index))) {
 		SA_interval = traverse (curr_index, SA_interval, L - (K - 1), S, SA, query);
-		//cout << "SA: " << SA_interval.depth <<" " <<SA_interval.start << " " << SA_interval.end << endl;
+		cout << "[SA_interval] depth: " << SA_interval.depth <<" start: " <<SA_interval.start << " end: " << SA_interval.end << endl;
 		MEM_interval = traverse (curr_index, MEM_interval, query.length(), S, SA, query);
-    break;
+		cout << "[MEM_interval] depth: " << MEM_interval.depth <<" start: " <<MEM_interval.start << " end: " << MEM_interval.end << endl;
 		if (SA_interval.depth <= 1) {
 			SA_interval = MEM_interval = {0, 0, N / K - 1};
 			curr_index += K;
