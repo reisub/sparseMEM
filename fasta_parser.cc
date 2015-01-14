@@ -14,7 +14,7 @@ void fasta_parser(string filename, string &output_string, vector<string> &meta_d
 	ifstream data(filename.c_str());
 
 	if(!data.is_open()) { cerr << "unable to open " << filename << endl; exit(1); }
-	while(!data.eof() {
+	while(!data.eof()) {
 		getline(data, line); // Load one line at a time.
 		if(line.length() == 0) continue;
 

@@ -19,7 +19,7 @@ $(TEST_EXECUTABLE): $(TEST_OBJECTS) $(OBJECTS)
 	$(CXX) $(CFLAGS) $< -o $@
 
 test: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/afumig.fasta test_cases/query.txt 1 30
+	./$(EXECUTABLE) test_cases/afumig_small.fasta test_cases/query.txt 2 30
 
 unit: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
