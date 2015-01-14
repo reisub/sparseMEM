@@ -97,7 +97,9 @@ interval_t topdown(char cmp_char, interval_t interval, string &S, int *SA) {
 	return {-1, 0, 0};
 }
 
-
+/*
+* Builds suffix links for a (sparse) suffix array
+*/
 interval_t suffix_link (interval_t interval, int *ISA, int *SA, int *LCP, int K, int N) {
 	int offset = interval.depth;
 	int start = interval.start;
@@ -111,6 +113,10 @@ interval_t suffix_link (interval_t interval, int *ISA, int *SA, int *LCP, int K,
 
 	return expand_link({offset, start, end}, LCP, K, N); 
 }
+/*
+* Addition function to suffix_link.
+* Tries to build a interval by looking only at  
+*/
 
 interval_t expand_link (interval_t interval, int *LCP, int K, int N) {
 	int offset = interval.depth;
@@ -139,7 +145,13 @@ interval_t expand_link (interval_t interval, int *LCP, int K, int N) {
 	return {offset, start, end};
 }
 
-
+/*
+* Computes interval d:[s..e] of Suffix array that contains query string.
+* d = depth = character's found (triplet.depth)
+* s = start = starting index of Suffix array that contains character on query_index location in query_string
+* e = end = ending index of suffix array
+* -1 == character (interval) not found 
+*/
 interval_t traverse(int query_index, interval_t interval, int size, string &S, int *SA, string &query) {
 	interval_t triplet_tmp;
   /*
@@ -166,10 +178,16 @@ interval_t traverse(int query_index, interval_t interval, int size, string &S, i
 	return interval;
 }
 
+/*
+* Prints out all maximal exact matches of at least L characters
+*/
 void print_MEM (int query_index, int ref_string_index, int length){
   cout << "\t" << ref_string_index  << "\t" << query_index << "\t" << length << endl; 
 } 
 
+/* 
+* Tries to expand matched query 
+*/
 void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L) { // K is step, K-SA
 	for (int k = 0; k < K  ; k += 1) {
 		if (query_index == 0 or ref_string_index == 0) {
@@ -187,9 +205,9 @@ void findL (int query_index, int ref_string_index, int length, string &S, string
 		length += 1;
 	}
 }
-
-
-
+/*
+* Collects all the matches
+*/
 void collect_MEMs (int curr_index, interval_t SA_i, interval_t MEM_i, string &S, string &query, int *SA, int *LCP, int K, int N, int L) {
 	int SA_index = SA_i.depth;
 	int SA_start = SA_i.start;
@@ -224,27 +242,32 @@ void collect_MEMs (int curr_index, interval_t SA_i, interval_t MEM_i, string &S,
 	return ;
 }
 /*
-*
-*
-*
+* Main functions for finding Maximal Exact Matches.
+* It uses 2 triplets (intervals): SA_interval and MEM_interval for to locate indexes in Suffix Array which  
+* contain query string (traverse function). 
+* Collect_MEMs functions is used to locate maximal matches in using these intervals (and auxillary arrays:
+* LCP (longest common prefix) and ISA (inverse Suffix Array)
+* Function suffix_link is used to narrow down intervals (looks for 'missing' suffixes in sparse arrays) 
+* by building suffix links during search time (instead of build it before search - like in suffix trees) 
 */
 void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query, int K, int N, int L) {
 	interval_t SA_interval = {0, 0, N / K - 1};
 	interval_t MEM_interval = {0, 0, N / K - 1};
 	int curr_index = query_index;
+	/*
   cout << "\nMEM\n";
   cout << "query_index: " << query_index <<   "\n";
   cout << "string: " << S <<"\n";
   cout << "query: " << query << "\n";
   cout << "K: " << K << " N:" << N << " L: " << L <<endl ;
-  
+  */
   if (L < K) return;
   
 	while (curr_index < (query.length() - (K - query_index))) {
 		SA_interval = traverse (curr_index, SA_interval, L - (K - 1), S, SA, query);
-		cout << "SA: " << SA_interval.depth <<" " <<SA_interval.start << " " << SA_interval.end << endl;
+		//cout << "SA: " << SA_interval.depth <<" " <<SA_interval.start << " " << SA_interval.end << endl;
 		if (SA_interval.depth > MEM_interval.depth) MEM_interval = SA_interval;
-   cout << "MEM: " << MEM_interval.depth <<" " <<MEM_interval.start << " " << MEM_interval.end << endl;
+    //cout << "MEM: " << MEM_interval.depth <<" " <<MEM_interval.start << " " << MEM_interval.end << endl;
 		if (SA_interval.depth <= 1) {
 			SA_interval = MEM_interval = {0, 0, N / K - 1};
 			curr_index += K;
@@ -275,6 +298,6 @@ void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query,
 		}
 	}
 
-	return ; // MEMs;
+	return ; // MEM;
 }
 

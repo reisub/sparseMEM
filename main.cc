@@ -134,7 +134,7 @@ int main(int argc, char *argv[]) {
   // Search for MEMs:
   //cout << endl << "\tRef.\tQuery\tLength" << endl;
   int p0 = 0;
-  MEM(p0, ref_string, sparseISA, sparseLCP, sparseSA, query_string, K, N, L);
+  //MEM(p0, ref_string, sparseISA, sparseLCP, sparseSA, query_string, K, N, L);
 
   return 0;
 }

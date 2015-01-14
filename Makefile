@@ -19,13 +19,13 @@ $(TEST_EXECUTABLE): $(TEST_OBJECTS) $(OBJECTS)
 	$(CXX) $(CFLAGS) $< -o $@
 
 test: $(EXECUTABLE)
-	./$(EXECUTABLE) test_cases/afumig.fasta test_cases/query.fa 1 30
+	./$(EXECUTABLE) test_cases/afumig.fasta test_cases/query.txt 1 30
 
 unit: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
 
 ref: mummer
-	./mummer -maxmatch -b -n -threads 3 test_cases/query.fa test_cases/afumig.fasta -k 2 -l 30
+	./mummer -maxmatch -b -n -threads 3 test_cases/query.fa test_cases/afumig_small.fast -k 2 -l 30
 
 clean:
 	-rm $(OBJECTS) $(EXECUTABLE)
