@@ -86,12 +86,13 @@ interval_t topdown(char cmp_char, interval_t interval, string &S, int *SA) {
 	if (cmp_char > S[SA[end] + offset]){
 		return {-1, 0, 0};
 	}
-  cout  <<"interval: " << interval.depth <<" " << interval.start << " " << interval.end << endl;
+  //cout  <<"interval: " << interval.depth <<" " << interval.start << " " << interval.end << endl;
 	lower_bound = binary_search_left (cmp_char, interval, S, SA);
-	cout << "lower bound " << lower_bound << endl;
+	//cout << "lower bound " << lower_bound << endl;
 	upper_bound = binary_search_right (cmp_char, interval, S, SA);
-	cout << "upper bound " << upper_bound << endl;
+	//cout << "upper bound " << upper_bound << endl;
 	if (lower_bound <= upper_bound) {
+	  //cout << "return values: " << offset + 1 <<  " " << lower_bound << " " << upper_bound << " " << endl;
 		return {offset + 1, lower_bound, upper_bound};
 	}	
 
@@ -165,13 +166,12 @@ interval_t traverse(int query_index, interval_t interval, int size, string &S, i
   int i = 0; 
 	while (query_index + interval.depth < (signed) query.length()) {
 		triplet_tmp = topdown (query [query_index + interval.depth],	interval, S, SA);
-    cout << "\n[" << i++  << "] " <<"interval: " << triplet_tmp.depth <<" " << triplet_tmp.start << " " << triplet_tmp.end << endl;
-		break;
+    //cout << "\n[" << i++  << "] " <<"interval: " << triplet_tmp.depth <<" " << triplet_tmp.start << " " << triplet_tmp.end << endl;
 		if (triplet_tmp.depth == -1 )
 			return interval;	
 
 		interval = triplet_tmp;
-		if (interval.depth >= size) 
+		if (interval.depth > size) 
 			break;		
 	}
 	
@@ -252,7 +252,7 @@ void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query,
 	interval_t MEM_interval = {0, 0, N / K - 1};
 	int curr_index = query_index;
 	
-  cout << "\nMEM\n";
+  //cout << "\nMEM\n";
   /*cout << "query_index: " << query_index <<   "\n";
   cout << "string: " << S <<"\n";
   cout << "query: " << query << "\n";
@@ -262,9 +262,9 @@ void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query,
   
 	while (curr_index < (query.length() - (K - query_index))) {
 		SA_interval = traverse (curr_index, SA_interval, L - (K - 1), S, SA, query);
-		cout << "[SA_interval] depth: " << SA_interval.depth <<" start: " <<SA_interval.start << " end: " << SA_interval.end << endl;
+		//cout << "[SA_interval] depth: " << SA_interval.depth <<" start: " <<SA_interval.start << " end: " << SA_interval.end << endl;
 		MEM_interval = traverse (curr_index, MEM_interval, query.length(), S, SA, query);
-		cout << "[MEM_interval] depth: " << MEM_interval.depth <<" start: " <<MEM_interval.start << " end: " << MEM_interval.end << endl;
+		//cout << "[MEM_interval] depth: " << MEM_interval.depth <<" start: " <<MEM_interval.start << " end: " << MEM_interval.end << endl;
 		if (SA_interval.depth <= 1) {
 			SA_interval = MEM_interval = {0, 0, N / K - 1};
 			curr_index += K;
