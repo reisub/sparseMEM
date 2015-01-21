@@ -58,6 +58,7 @@ int main(int argc, char *argv[]) {
 
     std::string ref_string;
     ref_string = ref_string2.substr (startpos[k], startpos[k+1] - startpos[k]);
+    //cout << startpos[k] << " " << startpos[k+1] << endl;
 
     // pad string with termination character $ (if needed)
     int pad_length = K - (ref_string.size() % K);
@@ -100,10 +101,10 @@ int main(int argc, char *argv[]) {
     int j = 0;
     int i = 0;
     for(int iter = 0; iter < size; iter++) {
-      i = (int) sparseSA[iter];
-      j = (int) sparseSA[iter - 1];
       if(iter == 0) sparseLCP[iter] = -1; // request for first member
       else {
+        i = (int) sparseSA[iter];
+        j = (int) sparseSA[iter - 1];
         while((i + matched < N) && (j + matched < N) &&
           (ref_string[i + matched] == ref_string[j + matched]))
             ++matched;
