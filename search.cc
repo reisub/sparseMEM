@@ -117,6 +117,17 @@ interval_t suffix_link (interval_t interval, int *ISA, int *SA, int *LCP, int K,
 
 	return expand_link({offset, start, end}, LCP, K, N);
 }
+int log2(int x){
+  int res = -1;
+  
+  while (x) {
+    x >>= 1;
+    res++;
+  }
+
+return res;
+}
+
 /*
 * Addition function to suffix_link.
 * Tries to build a interval by looking only at
@@ -128,7 +139,7 @@ interval_t expand_link (interval_t interval, int *LCP, int K, int N) {
 
 	if (offset == 0) return {0, 0, N - 1};
 	
-	int T = 2 * offset * log(N/K) / log(2.0);
+	int T = 2 * offset * log2(N/K);
 	int e = 0;
 
 	while (start >= 0 and LCP[start] >= offset) {
@@ -165,8 +176,7 @@ interval_t traverse(int query_index, interval_t interval, int size, string &S, i
   cout << "size: " << size << endl ;
   cout << "interval: " << interval.depth <<" " << interval.start << " " << interval.end << endl;
   */
-  int i = 0;
-	while ((query_index + interval.depth) < query.length()) {
+	while ((query_index + interval.depth) < (signed)query.length()) {
 	  //cout << "\n[" << i  << "] " <<"interval: " << triplet_tmp.depth <<" " << triplet_tmp.start << " " << triplet_tmp.end << endl;
 		triplet_tmp = topdown (query [query_index + interval.depth], interval, S, SA);
     //cout << "\n[" << i++  << "] " <<"interval: " << triplet_tmp.depth <<" " << triplet_tmp.start << " " << triplet_tmp.end << endl;
@@ -191,20 +201,17 @@ void print_MEM (MEM_t mem){
 /*
 * Tries to expand matched query  (to the left)
 */
-void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L, std::vector<MEM_t> &mems) { // K is step, K-SA
+void findL (int query_index, int ref_string_index, int length, string &S, string &query, int K, int L,std::vector<MEM_t> &mems) { // K is step, K-SA
 	for (int k = 0; k < K ; k += 1){
-		if ((query_index == 0 or ref_string_index == 0) and length >= L) {
-			cout << "\t" << ref_string_index + 1 << "\t" << query_index + 1  << "\t"<< length<< endl;
-			//mems.push_back({ref_string_index + 1, query_index + 1, length});
+		if (((query_index - k == 0) or 
+		(ref_string_index - k == 0) or 
+		(query[query_index - k - 1] != S[ref_string_index - k - 1])) and 
+		length >= L) {
+		   mems.push_back({ref_string_index - k + 1, query_index - k + 1, length});
+			//cout << "\t" << ref_string_index - k + 1 << "\t" << query_index - k + 1  << "\t"<< length<< endl;
 			return ;
 		}
-
-		if (query[query_index - 1] != S[ref_string_index - 1] and length >= L){
-		cout << "\t" << ref_string_index + 1 << "\t" << query_index + 1  << "\t" << length<< endl;
-			//mems.push_back({ref_string_index + 1, query_index + 1, length});
-			return ;
-		}
-
+		
 		query_index -= 1;
 		ref_string_index -= 1;
 		length += 1;
@@ -266,7 +273,7 @@ void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query,
   */
 	if (L < K) return;
 
-	while (curr_index < (query.length() - (K - query_index))) {
+	while (curr_index < ((signed)query.length() - (K - query_index))) {
 		SA_interval = traverse (curr_index, SA_interval, L - (K - 1), S, SA, query);
 		//cout << "[SA_interval] depth: " << SA_interval.depth <<" start: " <<SA_interval.start << " end: " << SA_interval.end << endl;
 		MEM_interval = traverse (curr_index, MEM_interval, query.length(), S, SA, query);
@@ -291,6 +298,18 @@ void MEM(int query_index, string &S, int *ISA, int *LCP, int *SA, string &query,
 			continue;
 		}
 	}
+		for (int i = 0; i < mems.size(); ++i) {
+		  bool falsePositive = false;
+		  for (int j = 0; j < mems.size(); ++j) {
+			  if (mems[i].string_index == mems[j].string_index and mems[i].length < mems[j].length) {
+				  falsePositive = true;
+				  break;
+			  }
+		  }
+		  if(!falsePositive) {
+			  print_MEM(mems[i]);
+		  }
+	  }
 
 	return ; // MEMs;
 }
